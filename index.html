@@ -27,9 +27,12 @@
         .char-card { position: relative; width: 33vw; height: 88vh; transition: 0.7s cubic-bezier(0.15, 1, 0.3, 1); filter: brightness(0.4); cursor: pointer; }
         .char-card:hover { filter: brightness(1.1); transform: translateY(-20px); width: 35vw; }
         .char-img { width: 100%; height: 100%; background-repeat: no-repeat; background-position: center bottom; background-size: contain; }
+        
+        /* 人物台词框核心样式 */
         .char-info { position: absolute; bottom: 180px; left: 20px; right: 20px; background: rgba(0,0,0,0.88); border-left: 5px solid var(--gold-m); padding: 25px; opacity: 0; transition: 0.5s; backdrop-filter: blur(12px); pointer-events: none; }
         .char-card:hover .char-info { opacity: 1; transform: translateX(10px); }
         .char-name { color: var(--gold-l); font-size: 32px; font-weight: bold; margin-bottom: 10px; letter-spacing: 8px; }
+        .char-desc { font-size: 15px; color: #ddd; line-height: 1.8; }
 
         #mode-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); backdrop-filter: blur(25px); z-index: 6000; display: none; justify-content: center; align-items: center; }
         .modal-content { background: #080808; border: 1px solid var(--gold-m); padding: 50px; width: 360px; text-align: center; }
@@ -48,32 +51,21 @@
         .star.active { color: var(--gold-m); text-shadow: 0 0 15px var(--gold-m); transform: scale(1.3); }
         .ctrl-btn { width: 100%; margin-top: 25px; background: var(--gold-m); border: none; padding: 22px; font-weight: 900; cursor: pointer; color: black; letter-spacing: 8px; }
 
-        /* --- 手机端专项适配补丁 --- */
         @media screen and (max-width: 768px) {
             .header-section { top: 30px; }
             .main-title { font-size: 32px; letter-spacing: 8px; }
-            .stage { gap: 10px; align-items: flex-end; padding-bottom: 50px; }
-            .char-card { width: 48vw; height: 75vh; filter: brightness(0.7); }
-            .char-card:hover { width: 50vw; transform: translateY(-5px); filter: brightness(1.1); }
-            .char-info { padding: 12px; bottom: 80px; left: 5px; right: 5px; border-left-width: 3px; }
-            .char-name { font-size: 20px; letter-spacing: 4px; }
+            .stage { gap: 8px; align-items: flex-end; padding-bottom: 40px; }
+            .char-card { width: 48vw; height: 75vh; filter: brightness(0.6); }
+            .char-card:hover { width: 50vw; transform: translateY(-5px); filter: brightness(1); }
+            .char-info { padding: 15px; bottom: 60px; left: 5px; right: 5px; border-left-width: 3px; opacity: 1; pointer-events: none; }
+            .char-name { font-size: 18px; margin-bottom: 5px; }
+            .char-desc { font-size: 11px; line-height: 1.4; }
             
-            .timer-panel { 
-                top: 20px; right: 50%; transform: translateX(50%); 
-                width: 80%; padding: 20px; border-radius: 15px; text-align: center;
-            }
-            #timer { font-size: 55px; }
-            .star-grid { gap: 8px; }
-            .star { font-size: 16px; }
-
-            #control-hub { 
-                top: auto; bottom: 20px; right: 50%; transform: translateX(50%);
-                width: 70%; display: flex !important; justify-content: space-around; 
-                padding: 10px; flex-direction: row; align-items: center;
-            }
+            .timer-panel { top: 20px; right: 50%; transform: translateX(50%); width: 85%; padding: 15px; text-align: center; }
+            #timer { font-size: 50px; }
+            .star-grid { gap: 6px; }
+            #control-hub { top: auto; bottom: 20px; right: 50%; transform: translateX(50%); width: 80%; display: flex !important; justify-content: center; gap: 15px; padding: 10px; }
             #bgm-name, .vol-row span { display: none; }
-            .vol-row { margin-bottom: 0; }
-            #music-icon { margin-bottom: 0; width: 28px; }
         }
     </style>
 </head>
@@ -92,11 +84,17 @@
         <div class="stage">
             <div class="char-card" onmouseenter="hoverPlay('chi')" onclick="openSet('chi')">
                 <div class="char-img" style="background-image: url('./shen.png');"></div>
-                <div class="char-info"><div class="char-name">迟 砚</div></div>
+                <div class="char-info">
+                    <div class="char-name">迟 砚</div>
+                    <div class="char-desc">“笔尖停得太久了。如果不想要这双手，我可以帮帮你。”</div>
+                </div>
             </div>
             <div class="char-card" onmouseenter="hoverPlay('lin')" onclick="openSet('lin')">
                 <div class="char-img" style="background-image: url('./lin.png');"></div>
-                <div class="char-info"><div class="char-name">林 深</div></div>
+                <div class="char-info">
+                    <div class="char-name">林 深</div>
+                    <div class="char-desc">“乖一点。等计时器归零，我会给你想要的奖励。”</div>
+                </div>
             </div>
         </div>
     </div>
@@ -114,7 +112,7 @@
         <div class="timer-panel">
             <div id="timer">25:00</div>
             <div class="signin-box">
-                <button onclick="doSign()" style="width:100%; background:none; border:1px solid var(--gold-m); color:var(--gold-l); padding:12px; cursor:pointer; font-weight:bold; font-size:12px;">DAILY CHECK-IN</button>
+                <button onclick="doSign()" style="width:100%; background:none; border:1px solid var(--gold-m); color:var(--gold-l); padding:12px; cursor:pointer; font-weight:bold;">DAILY CHECK-IN</button>
                 <div class="star-grid" id="star-g"></div>
             </div>
             <button id="ctrl" onclick="toggle()" class="ctrl-btn">START</button>
