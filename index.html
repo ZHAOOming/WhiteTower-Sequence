@@ -10,6 +10,7 @@
         #entry-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: 1.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .start-gate { padding: 22px 70px; border: 1px solid var(--gold-m); color: var(--gold-m); font-size: 22px; letter-spacing: 12px; cursor: pointer; background: none; transition: 0.5s; text-shadow: 0 0 10px rgba(212,167,63,0.5); }
         .start-gate:hover { background: var(--gold-m); color: black; box-shadow: 0 0 50px var(--gold-m); }
+        
         #control-hub { position: fixed; top: 20px; right: 20px; z-index: 5000; background: rgba(0,0,0,0.85); padding: 18px; border: 1px solid var(--gold-m); border-radius: 15px; backdrop-filter: blur(15px); display: none; }
         .vol-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: 12px; color: var(--gold-l); }
         input[type=range] { cursor: pointer; accent-color: var(--gold-m); width: 90px; }
@@ -17,9 +18,11 @@
         #bgm-name { font-size: 10px; color: var(--gold-m); text-align: center; margin-bottom: 8px; width: 90px; }
         .rotating { animation: spin 4s linear infinite; }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
         #selection-ui { width: 100%; height: 100%; background: radial-gradient(circle at center, #181818 0%, #000 100%); position: relative; z-index: 10; }
         .header-section { position: absolute; top: 60px; width: 100%; text-align: center; z-index: 100; }
         .main-title { font-size: 64px; font-weight: 900; letter-spacing: 20px; background: linear-gradient(to bottom, #fff 20%, var(--gold-m) 50%, var(--gold-d) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
         .stage { display: flex; width: 100vw; height: 100vh; justify-content: center; align-items: flex-end; gap: 50px; }
         .char-card { position: relative; width: 33vw; height: 88vh; transition: 0.7s cubic-bezier(0.15, 1, 0.3, 1); filter: brightness(0.4); cursor: pointer; }
         .char-card:hover { filter: brightness(1.1); transform: translateY(-20px); width: 35vw; }
@@ -27,7 +30,7 @@
         .char-info { position: absolute; bottom: 180px; left: 20px; right: 20px; background: rgba(0,0,0,0.88); border-left: 5px solid var(--gold-m); padding: 25px; opacity: 0; transition: 0.5s; backdrop-filter: blur(12px); pointer-events: none; }
         .char-card:hover .char-info { opacity: 1; transform: translateX(10px); }
         .char-name { color: var(--gold-l); font-size: 32px; font-weight: bold; margin-bottom: 10px; letter-spacing: 8px; }
-        .char-desc { font-size: 15px; color: #ddd; line-height: 1.8; }
+
         #mode-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); backdrop-filter: blur(25px); z-index: 6000; display: none; justify-content: center; align-items: center; }
         .modal-content { background: #080808; border: 1px solid var(--gold-m); padding: 50px; width: 360px; text-align: center; }
         .time-setter { display: flex; align-items: center; justify-content: center; gap: 25px; margin-bottom: 35px; }
@@ -35,6 +38,7 @@
         #set-time-display { font-size: 48px; font-weight: bold; color: var(--gold-m); width: 150px; font-family: 'Courier New', monospace; }
         .mode-btn { display: block; width: 100%; padding: 20px; margin-bottom: 15px; background: none; border: 1px solid #333; color: #aaa; cursor: pointer; font-weight: bold; }
         .mode-btn.special { border-color: var(--red); color: var(--red); }
+
         #focus-mode { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; display: none; opacity: 0; transition: 2s; z-index: 200; }
         #v-bg { position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; transform: translate(-50%, -50%); object-fit: cover; }
         .timer-panel { position: absolute; top: 150px; right: 60px; text-align: right; background: rgba(0,0,0,0.65); padding: 40px; border-radius: 25px; border: 1px solid var(--gold-m); backdrop-filter: blur(20px); width: 320px; }
@@ -43,20 +47,103 @@
         .star { font-size: 20px; color: #1a1a1a; text-align: center; transition: 0.5s; }
         .star.active { color: var(--gold-m); text-shadow: 0 0 15px var(--gold-m); transform: scale(1.3); }
         .ctrl-btn { width: 100%; margin-top: 25px; background: var(--gold-m); border: none; padding: 22px; font-weight: 900; cursor: pointer; color: black; letter-spacing: 8px; }
+
+        /* --- 手机端专项适配补丁 --- */
+        @media screen and (max-width: 768px) {
+            .header-section { top: 30px; }
+            .main-title { font-size: 32px; letter-spacing: 8px; }
+            .stage { gap: 10px; align-items: flex-end; padding-bottom: 50px; }
+            .char-card { width: 48vw; height: 75vh; filter: brightness(0.7); }
+            .char-card:hover { width: 50vw; transform: translateY(-5px); filter: brightness(1.1); }
+            .char-info { padding: 12px; bottom: 80px; left: 5px; right: 5px; border-left-width: 3px; }
+            .char-name { font-size: 20px; letter-spacing: 4px; }
+            
+            .timer-panel { 
+                top: 20px; right: 50%; transform: translateX(50%); 
+                width: 80%; padding: 20px; border-radius: 15px; text-align: center;
+            }
+            #timer { font-size: 55px; }
+            .star-grid { gap: 8px; }
+            .star { font-size: 16px; }
+
+            #control-hub { 
+                top: auto; bottom: 20px; right: 50%; transform: translateX(50%);
+                width: 70%; display: flex !important; justify-content: space-around; 
+                padding: 10px; flex-direction: row; align-items: center;
+            }
+            #bgm-name, .vol-row span { display: none; }
+            .vol-row { margin-bottom: 0; }
+            #music-icon { margin-bottom: 0; width: 28px; }
+        }
     </style>
 </head>
 <body onclick="initSystem()">
-    <div id="entry-mask"><h1 style="color:var(--gold-l); letter-spacing:18px; margin-bottom:50px; font-weight:900;">首席监考官·沉浸特训</h1><button class="start-gate" onclick="initSystem()">开启感官链接</button></div>
-    <div id="control-hub"><div id="bgm-name">BGM 1</div><svg id="music-icon" onclick="toggleBGM(event)" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18V5L21 3V16" stroke="#f9e194" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="#f9e194" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke="#f9e194" stroke-width="2"/></svg><div class="vol-row"><span>监考官</span><input type="range" min="0" max="1" step="0.1" value="1" oninput="vp.volume=this.value"></div><div class="vol-row"><span>背景音</span><input type="range" min="0" max="1" step="0.1" value="0.2" oninput="mp.volume=this.value"></div></div>
-    <div id="selection-ui"><div class="header-section"><h1 class="main-title">监控自习室</h1></div><div class="stage"><div class="char-card" onmouseenter="hoverPlay('chi')" onclick="openSet('chi')"><div class="char-img" style="background-image: url('./shen.png');"></div><div class="char-info"><div class="char-name">迟 砚</div><div class="char-desc">“笔尖停得太久了。如果不想要这双手，我可以帮帮你。”</div></div></div><div class="char-card" onmouseenter="hoverPlay('lin')" onclick="openSet('lin')"><div class="char-img" style="background-image: url('./lin.png');"></div><div class="char-info"><div class="char-name">林 深</div><div class="char-desc">“乖一点。等计时器归零，我会给你想要的奖励。”</div></div></div></div></div>
-    <div id="mode-modal"><div class="modal-content"><div class="time-setter"><button class="time-btn" onclick="adjTime(-5)">-</button><div id="set-time-display">25:00</div><button class="time-btn" onclick="adjTime(5)">+</button></div><button onclick="launch(1)" class="mode-btn normal">陪伴模式</button><button onclick="launch(3)" class="mode-btn special">监管模式</button></div></div>
-    <div id="focus-mode"><video id="v-bg" playsinline></video><div class="timer-panel"><div id="timer">25:00</div><div class="signin-box"><button onclick="doSign()" style="width:100%; background:none; border:1px solid var(--gold-m); color:var(--gold-l); padding:12px; cursor:pointer; font-weight:bold;">DAILY CHECK-IN</button><div class="star-grid" id="star-g"></div></div><button id="ctrl" onclick="toggle()" class="ctrl-btn">START</button></div></div>
+    <div id="entry-mask"><h1 style="color:var(--gold-l); letter-spacing:10px; margin-bottom:50px; font-weight:900; text-align:center;">首席监考官<br>沉浸特训</h1><button class="start-gate" onclick="initSystem()">开启感官链接</button></div>
+    
+    <div id="control-hub">
+        <div id="bgm-name">BGM 1</div>
+        <svg id="music-icon" onclick="toggleBGM(event)" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18V5L21 3V16" stroke="#f9e194" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6" cy="18" r="3" stroke="#f9e194" stroke-width="2"/><circle cx="18" cy="16" r="3" stroke="#f9e194" stroke-width="2"/></svg>
+        <div class="vol-row"><input type="range" min="0" max="1" step="0.1" value="1" oninput="vp.volume=this.value"></div>
+        <div class="vol-row"><input type="range" min="0" max="1" step="0.1" value="0.2" oninput="mp.volume=this.value"></div>
+    </div>
+
+    <div id="selection-ui">
+        <div class="header-section"><h1 class="main-title">监控自习室</h1></div>
+        <div class="stage">
+            <div class="char-card" onmouseenter="hoverPlay('chi')" onclick="openSet('chi')">
+                <div class="char-img" style="background-image: url('./shen.png');"></div>
+                <div class="char-info"><div class="char-name">迟 砚</div></div>
+            </div>
+            <div class="char-card" onmouseenter="hoverPlay('lin')" onclick="openSet('lin')">
+                <div class="char-img" style="background-image: url('./lin.png');"></div>
+                <div class="char-info"><div class="char-name">林 深</div></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="mode-modal">
+        <div class="modal-content">
+            <div class="time-setter"><button class="time-btn" onclick="adjTime(-5)">-</button><div id="set-time-display">25:00</div><button class="time-btn" onclick="adjTime(5)">+</button></div>
+            <button onclick="launch(1)" class="mode-btn normal">陪伴模式</button>
+            <button onclick="launch(3)" class="mode-btn special">监管模式</button>
+        </div>
+    </div>
+
+    <div id="focus-mode">
+        <video id="v-bg" playsinline></video>
+        <div class="timer-panel">
+            <div id="timer">25:00</div>
+            <div class="signin-box">
+                <button onclick="doSign()" style="width:100%; background:none; border:1px solid var(--gold-m); color:var(--gold-l); padding:12px; cursor:pointer; font-weight:bold; font-size:12px;">DAILY CHECK-IN</button>
+                <div class="star-grid" id="star-g"></div>
+            </div>
+            <button id="ctrl" onclick="toggle()" class="ctrl-btn">START</button>
+        </div>
+    </div>
+
     <audio id="v-player"></audio><audio id="m-player"></audio>
 
     <script>
         /* 核心业务逻辑加密保护 (c) 2026 白塔序列实验室 */
         var _0x2c4e=["\x57\x61\x73\x65\x64\x61\x32\x30\x32\x36","\x70\x72\x6f\x6d\x70\x74","\x61\x62\x6f\x75\x74\x3a\x62\x6c\x61\x6e\x6b"];(function(){var _0x1=window[_0x2c4e[1]]("\u300c\u767d\u5854\u5e8f\u5217\u300d\u7cfb\u7edf\u63a5\u5165\u8bf7\u6c42\uff1a\u8bf7\u8f93\u5165\u60a8\u7684\u7279\u8bad\u6388\u6743\u7801");if(_0x1!==_0x2c4e[0]){alert("\u6388\u6743\u7801\u9519\u8bef\uff0c\u7cfb\u7edf\u62d2\u7edd\u8bbf\u95ee\u3002");window.location.href=_0x2c4e[2]}})();
-        const bgmList=['bgm_1.mp3','bgm_2.mp3','bgm_3.mp3','bgm_4.mp3','bgm_5.mp3','bgm_6.mp3','bgm_7.mp3','bgm_8.mp3'];let st={man:'',mode:'',left:1500,active:false,unl:false,checking:false,curBgmIdx:0,initialTime:1500};const vp=document.getElementById('v-player'),mp=document.getElementById('m-player'),video=document.getElementById('v-bg');let timer=null,nextRnd=0;function initSystem(){if(st.unl)return;st.unl=true;document.getElementById('entry-mask').style.opacity='0';setTimeout(()=>{document.getElementById('entry-mask').style.display='none'},1000);playBGM(0);document.getElementById('control-hub').style.display='block';document.getElementById('music-icon').classList.add('rotating')}function playBGM(_0x2){st.curBgmIdx=_0x2%bgmList.length;mp.src=`./${bgmList[st.curBgmIdx]}`;mp.volume=0.2;mp.play().catch(_0x3=>{});document.getElementById('bgm-name').innerText=`BGM ${st.curBgmIdx+1}`;mp.onended=()=>playBGM(st.curBgmIdx+1)}function toggleBGM(_0x4){_0x4.stopPropagation();if(!mp.paused){mp.pause();document.getElementById('music-icon').classList.remove('rotating')}else{mp.play();document.getElementById('music-icon').classList.add('rotating')}}function adjTime(_0x5){let _0x6=st.initialTime/60;_0x6+=_0x5;if(_0x6<5)_0x6=5;if(_0x6>120)_0x6=120;st.initialTime=_0x6*60;st.left=st.initialTime;document.getElementById('set-time-display').innerText=`${_0x6}:00`;document.getElementById('timer').innerText=`${_0x6}:00`}function hoverPlay(_0x7){if(!st.unl)return;vp.src=`./${_0x7}_select.wav`;vp.play()}function openSet(_0x8){st.man=_0x8;document.getElementById('mode-modal').style.display='flex'}function launch(_0x9){st.mode=_0x9;document.getElementById('mode-modal').style.display='none';document.getElementById('selection-ui').style.display='none';document.getElementById('focus-mode').style.display='block';setTimeout(()=>document.getElementById('focus-mode').style.opacity='1',50);const _0xa=st.man==='chi'?'shen':'lin';video.src=`./${_0xa}_start.mp4`;video.play();video.onended=()=>{video.src=`./${_0xa}_work.mp4`;video.loop=true;video.play()};setNextCheckPoint()}function setNextCheckPoint(){let _0xb=st.initialTime/60,_0xc=_0xb<=10?(120+Math.random()*120):(_0xb<=30?(120+Math.random()*300):(180+Math.random()*360));nextRnd=st.left-_0xc}function toggle(){const _0xd=document.getElementById('ctrl');if(st.active){clearInterval(timer);_0xd.innerText='RESUME';st.active=false}else{st.active=true;_0xd.innerText='PAUSE';if(st.left>=st.initialTime-5){let _0xe=st.man==='chi'?'_start.wav':'_start.wav';vp.src=`./${st.man}_${st.mode}${_0xe}`;vp.play()}timer=setInterval(()=>{if(st.checking)return;st.left--;document.getElementById('timer').innerText=`${Math.floor(st.left/60)}:${(st.left%60).toString().padStart(2,'0')}`;if(st.left<=nextRnd&&st.left>25){trigger();setNextCheckPoint()}if(st.left<=0){clearInterval(timer);st.active=false;st.checking=true;vp.src=`./${st.man}_${st.mode}_end.wav`;vp.play().catch(_0xf=>{location.reload()});vp.onended=()=>{setTimeout(()=>location.reload(),2000)}}},1000)}}function trigger(){st.checking=true;const _0x10=st.man==='chi'?'shen':'lin';video.src=`./${_0x10}_look.mp4`;video.loop=false;video.play();vp.src=`./${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`;vp.play();video.onended=()=>{video.src=`./${_0x10}_start.mp4`;video.play();video.onended=()=>{video.src=`./${_0x10}_work.mp4`;video.loop=true;video.play();st.checking=false}}}function doSign(){const _0x11=new Date().toDateString();if(localStorage.getItem('last_sign_vfinal')===_0x11){alert("\u4eca\u65e5\u7279\u8bad\u5df2\u6253\u5361\u3002");return}let _0x12=parseInt(localStorage.getItem('sc_final_v')||0)+1;localStorage.setItem('sc_final_v',_0x12);localStorage.setItem('last_sign_vfinal',_0x11);renderS();vp.src=`./${st.man}_select.wav`;vp.play()}function renderS(){const _0x13=parseInt(localStorage.getItem('sc_final_v')||0);const _0x14=document.getElementById('star-g');_0x14.innerHTML='';for(let _0x15=0;_0x15<21;_0x15++)_0x14.innerHTML+=`<div class="star ${_0x15<_0x13?'active':''}">✦</div>`}renderS();
+        const bgmList=['bgm_1.mp3','bgm_2.mp3','bgm_3.mp3','bgm_4.mp3','bgm_5.mp3','bgm_6.mp3','bgm_7.mp3','bgm_8.mp3'];
+        let st={man:'',mode:'',left:1500,active:false,unl:false,checking:false,curBgmIdx:0,initialTime:1500};
+        const vp=document.getElementById('v-player'),mp=document.getElementById('m-player'),video=document.getElementById('v-bg');
+        let timer=null,nextRnd=0;
+        
+        function initSystem(){if(st.unl)return;st.unl=true;document.getElementById('entry-mask').style.opacity='0';setTimeout(()=>{document.getElementById('entry-mask').style.display='none'},1000);playBGM(0);document.getElementById('control-hub').style.display='block';document.getElementById('music-icon').classList.add('rotating')}
+        function playBGM(idx){st.curBgmIdx=idx%bgmList.length;mp.src=`./${bgmList[st.curBgmIdx]}`;mp.volume=0.2;mp.play().catch(e=>{});document.getElementById('bgm-name').innerText=`BGM ${st.curBgmIdx+1}`;mp.onended=()=>playBGM(st.curBgmIdx+1)}
+        function toggleBGM(e){e.stopPropagation();if(!mp.paused){mp.pause();document.getElementById('music-icon').classList.remove('rotating')}else{mp.play();document.getElementById('music-icon').classList.add('rotating')}}
+        function adjTime(val){let m=st.initialTime/60+val;if(m<5)m=5;if(m>120)m=120;st.initialTime=m*60;st.left=st.initialTime;document.getElementById('set-time-display').innerText=`${m}:00`;document.getElementById('timer').innerText=`${m}:00`}
+        function hoverPlay(m){if(!st.unl)return;vp.src=`./${m}_select.wav`;vp.play()}
+        function openSet(m){st.man=m;document.getElementById('mode-modal').style.display='flex'}
+        function launch(md){st.mode=md;document.getElementById('mode-modal').style.display='none';document.getElementById('selection-ui').style.display='none';document.getElementById('focus-mode').style.display='block';setTimeout(()=>document.getElementById('focus-mode').style.opacity='1',50);const vPrefix=st.man==='chi'?'shen':'lin';video.src=`./${vPrefix}_start.mp4`;video.play();video.onended=()=>{video.src=`./${vPrefix}_work.mp4`;video.loop=true;video.play()};setNextCheckPoint()}
+        function setNextCheckPoint(){let m=st.initialTime/60,gap=m<=10?(120+Math.random()*120):(m<=30?(120+Math.random()*300):(180+Math.random()*360));nextRnd=st.left-gap}
+        function toggle(){const btn=document.getElementById('ctrl');if(st.active){clearInterval(timer);btn.innerText='RESUME';st.active=false}else{st.active=true;btn.innerText='PAUSE';if(st.left>=st.initialTime-5){vp.src=`./${st.man}_${st.mode}_start.wav`;vp.play()}timer=setInterval(()=>{if(st.checking)return;st.left--;document.getElementById('timer').innerText=`${Math.floor(st.left/60)}:${(st.left%60).toString().padStart(2,'0')}`;if(st.left<=nextRnd&&st.left>25){trigger();setNextCheckPoint()}if(st.left<=0){clearInterval(timer);st.active=false;st.checking=true;vp.src=`./${st.man}_${st.mode}_end.wav`;vp.play().catch(e=>{location.reload()});vp.onended=()=>{setTimeout(()=>location.reload(),2000)}}},1000)}}
+        function trigger(){st.checking=true;const vPrefix=st.man==='chi'?'shen':'lin';video.src=`./${vPrefix}_look.mp4`;video.loop=false;video.play();vp.src=`./${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`;vp.play();video.onended=()=>{video.src=`./${vPrefix}_start.mp4`;video.play();video.onended=()=>{video.src=`./${vPrefix}_work.mp4`;video.loop=true;video.play();st.checking=false}}}
+        function doSign(){const d=new Date().toDateString();if(localStorage.getItem('last_sign_vfinal')===d){alert("今日特训已打卡。");return}let c=parseInt(localStorage.getItem('sc_final_v')||0)+1;localStorage.setItem('sc_final_v',c);localStorage.setItem('last_sign_vfinal',d);renderS();vp.src=`./${st.man}_select.wav`;vp.play()}
+        function renderS(){const c=parseInt(localStorage.getItem('sc_final_v')||0);const g=document.getElementById('star-g');g.innerHTML='';for(let i=0;i<21;i++)g.innerHTML+=`<div class="star ${i<c?'active':''}">✦</div>`}
+        renderS();
     </script>
 </body>
 </html>
