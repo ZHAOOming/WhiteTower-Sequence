@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <link rel="manifest" href="./manifest.json">
+    <link rel="manifest" href="../manifest.json">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>白塔序列 · 首席监考官</title>
     <style>
-        :root { --gold-l: #f9e194; --gold-m: #d4a73f; --gold-d: #7a5a12; --black-b: #080808; --red: #8b0000; --glass: rgba(0,0,0,0.88); --border: 2px solid var(--gold-m); }
+        :root { --gold-l: #f9e194; --gold-m: #d4a73f; --gold-d: #7a5a12; --black-b: #080808; --red: #8b0000; --glass: rgba(0,0,0,0.88); }
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body, html { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden; font-family: "PingFang SC", sans-serif; color: white; user-select: none; }
+        #v-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none; }
         #entry-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .tower-logo { font-size: 24px; letter-spacing: 10px; color: var(--gold-l); margin-bottom: 40px; font-weight: 900; text-shadow: 0 0 15px var(--gold-m); text-align: center; }
         .auth-input { background: rgba(255,255,255,0.05); border: 1px solid var(--gold-d); color: white; padding: 15px; text-align: center; width: 280px; margin-bottom: 20px; outline: none; border-radius: 0; }
@@ -20,7 +21,7 @@
         .char-slide { min-width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; position: relative; padding: 20px; }
         .card-frame { position: relative; width: 100%; height: 85vh; border: 1px solid var(--gold-d); border-radius: 15px; overflow: hidden; background: linear-gradient(180deg, #111 0%, #000 100%); box-shadow: inset 0 0 30px rgba(212,167,63,0.1); display: flex; flex-direction: column; justify-content: flex-end; }
         .char-portrait { position: absolute; top: -5%; left: 0; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center center; z-index: 1; pointer-events: auto; }
-        .nav-hint { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center; color: var(--gold-l); font-size: 14px; letter-spacing: 4px; text-shadow: 0 0 10px var(--gold-m); opacity: 0.8; z-index: 5; pointer-events: none; animation: pulse 2s infinite; }
+        .nav-hint { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center; color: var(--gold-l); font-size: 14px; letter-spacing: 4px; text-shadow: 0 0 10px var(--gold-m); opacity: 0.8; z-index: 5; animation: pulse 2s infinite; pointer-events: none; }
         @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
         .char-info-box { position: relative; z-index: 10; width: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.95) 70%, transparent); padding: 30px 20px; margin-top: -20px; }
         .char-name { font-size: 32px; color: var(--gold-l); font-weight: bold; letter-spacing: 8px; margin-bottom: 8px; }
@@ -45,7 +46,12 @@
         #set-time-display { font-size: 42px; color: var(--gold-m); font-family: 'Courier New', monospace; font-weight: bold; width: 130px; text-align: center; }
         .btn-base { background: none; border: 1px solid var(--gold-m); color: var(--gold-m); padding: 12px; font-weight: bold; width: 100%; max-width: 280px; margin-top: 10px; }
         #back-home { position: fixed; top: env(safe-area-inset-top, 20px); left: 20px; z-index: 8500; display: none; background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px; font-size: 12px; border: 1px solid var(--gold-m); color: var(--gold-m); }
-        #v-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none; }
+        #rule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9500; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .rule-window { background: #0a0a0a; border: 1px solid var(--gold-m); width: 450px; padding: 40px; text-align: center; }
+        .rule-title { color: var(--gold-m); font-size: 22px; letter-spacing: 5px; margin-bottom: 30px; font-weight: 900; }
+        .rule-list { text-align: left; margin: 0 auto 30px; display: inline-block; padding: 0; }
+        .rule-item { color: #ccc; font-size: 14px; margin-bottom: 15px; line-height: 1.6; list-style: none; position: relative; padding-left: 25px; }
+        .rule-item::before { content: '✦'; position: absolute; left: 0; color: var(--gold-m); }
     </style>
 </head>
 <body>
@@ -61,42 +67,16 @@
                 <div class="card-frame" onclick="playVoice('chi')">
                     <div class="nav-hint">点击立绘互动 / 左右滑动切换</div>
                     <div class="char-portrait" style="background-image:url('../shen.png')"></div>
-                    <div class="char-info-box">
-                        <div class="char-name">迟 砚</div>
-                        <div class="char-desc">“笔尖停得太久了。如果不想要这双手，我可以帮帮你。”</div>
-                        <button class="btn-base" onclick="openMode('chi')">确认接入</button>
-                    </div>
+                    <div class="char-info-box"><div class="char-name">迟 砚</div><div class="char-desc">“笔尖停得太久了。如果不想要这双手，我可以帮帮你。”</div><button class="btn-base" onclick="openMode('chi')">确认接入</button></div>
                 </div>
             </div>
             <div class="char-slide">
                 <div class="card-frame" onclick="playVoice('lin')">
                     <div class="nav-hint">点击立绘互动 / 左右滑动切换</div>
                     <div class="char-portrait" style="background-image:url('../lin.png')"></div>
-                    <div class="char-info-box">
-                        <div class="char-name">林 深</div>
-                        <div class="char-desc">“乖一点。等计时器归零，我会给你想要的奖励。”</div>
-                        <button class="btn-base" onclick="openMode('lin')">确认接入</button>
-                    </div>
+                    <div class="char-info-box"><div class="char-name">林 深</div><div class="char-desc">“乖一点。等计时器归零，我会给你想要的奖励。”</div><button class="btn-base" onclick="openMode('lin')">确认接入</button></div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div id="gallery-overlay" onclick="if(event.target == this) hideGallery()">
-        <div class="gallery-window">
-            <div id="reward-main" class="reward-card" onclick="playReward()"><img id="reward-img" src=""><div id="lock-badge" style="position:absolute; top:15px; left:15px; background:var(--red); padding:4px 10px; font-size:11px; letter-spacing:1px;">未授权记录</div></div>
-            <div class="reward-content">
-                <h3 id="gallery-title" style="color:var(--gold-m); margin:0 0 15px 0;"></h3>
-                <div id="reward-title-text" style="font-weight:bold; color:var(--gold-l); margin-bottom:10px;"></div>
-                <div id="reward-story-text" style="font-size:12px; color:#ccc; line-height:1.7; white-space:pre-line; margin-bottom:20px;"></div>
-                <button onclick="hideGallery()" class="btn-base" style="width:100%; border-color:var(--gold-m);">返回特训</button>
-            </div>
-        </div>
-    </div>
-    <div id="rule-modal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:9500; display:none; align-items:center; justify-content:center;">
-        <div style="background:#0a0a0a; border:1px solid var(--gold-m); padding:30px; width:90%; max-width:380px; text-align:center;">
-            <div style="color:var(--gold-m); font-weight:bold; margin-bottom:20px;">特训准则</div>
-            <div style="font-size:13px; color:#999; text-align:left; margin-bottom:20px;">• 计时开始后请勿离开页面<br>• 建议横屏放置以获得最佳视野<br><span style="color:var(--gold-l);">• 累计打卡30天解锁绝密档案</span></div>
-            <button class="btn-base" style="background:var(--gold-m); color:black;" onclick="startTraining()">进入特训</button>
         </div>
     </div>
     <div id="mode-modal">
@@ -105,13 +85,36 @@
         <button class="btn-base" onclick="confirmMode(1)">陪伴模式</button>
         <button class="btn-base" style="color:var(--red); border-color:var(--red); margin-top:20px;" onclick="confirmMode(3)">监管模式</button>
     </div>
+    <div id="rule-modal">
+        <div class="rule-window">
+            <div class="rule-title">「白塔序列」特训准则</div>
+            <div class="rule-list">
+                <li class="rule-item">监考官将全程实时监控您的学习进度。</li>
+                <li class="rule-item">计时开始后，点击 DAILY CHECK-IN 完成今日打卡。</li>
+                <li class="rule-item">每累积签到 30 天，可激活对应监考官的绝密实验室记录。</li>
+                <li class="rule-item">特训期间请保持专注，随机查岗会随时降临。</li>
+            </div>
+            <button class="btn-base" style="background:var(--gold-m); color:black; border:none;" onclick="startTraining()">接受特训</button>
+        </div>
+    </div>
     <div id="focus-mode" style="display:none; position:relative; width:100%; height:100%;">
-        <video id="v-bg" playsinline muted loop style="position:absolute; width:100%; height:100%; object-fit:cover;"></video>
+        <video id="v-bg" playsinline muted style="position:absolute; width:100%; height:100%; object-fit:cover;"></video>
         <div class="timer-panel">
             <div id="timer">25:00</div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0;"><button onclick="doSign()" class="btn-base" style="width:70%; margin:0;">DAILY CHECK-IN</button><div onclick="showGallery()" style="font-size:30px;">🎁</div></div>
             <div id="star-g" class="star-grid"></div>
             <button id="ctrl-btn" onclick="toggleTimer()" class="btn-base" style="background:var(--gold-m); color:black;">START</button>
+        </div>
+    </div>
+    <div id="gallery-overlay" onclick="if(event.target == this) hideGallery()">
+        <div class="gallery-window">
+            <div id="reward-main" class="reward-card" onclick="playReward()"><img id="reward-img" src=""><div id="lock-badge" style="position:absolute; top:15px; left:15px; background:var(--red); padding:4px 10px; font-size:11px;">未授权记录</div></div>
+            <div class="reward-content">
+                <h3 id="gallery-title" style="color:var(--gold-m); margin:0 0 15px 0;"></h3>
+                <div id="reward-title-text" style="font-weight:bold; color:var(--gold-l); margin-bottom:10px;"></div>
+                <div id="reward-story-text" style="font-size:12px; color:#ccc; line-height:1.6; white-space:pre-line; margin-bottom:15px;"></div>
+                <button onclick="hideGallery()" class="btn-base" style="width:100%; border-color:var(--gold-m);">返回特训</button>
+            </div>
         </div>
     </div>
     <audio id="v-player"></audio><audio id="m-player" loop></audio>
@@ -128,16 +131,27 @@
         function initCarousel() { const el = document.getElementById('selection-ui'); const inner = document.getElementById('carousel'); el.addEventListener('touchstart', e => st.touchX = e.touches[0].clientX); el.addEventListener('touchend', e => { if(window.innerHeight > window.innerWidth) { const diff = st.touchX - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) { st.curIdx = diff > 0 ? Math.min(st.curIdx + 1, 1) : Math.max(st.curIdx - 1, 0); inner.style.transform = `translateX(-${st.curIdx * 100}%)`; } } }); }
         function openMode(m) { st.man = m; document.getElementById('mode-modal').style.display = 'flex'; }
         function confirmMode(md) { st.mode = md; document.getElementById('mode-modal').style.display = 'none'; document.getElementById('rule-modal').style.display = 'flex'; }
-        function startTraining() { document.getElementById('rule-modal').style.display = 'none'; document.getElementById('selection-ui').style.display = 'none'; document.getElementById('focus-mode').style.display = 'block'; document.getElementById('back-home').style.display = 'block'; const v = document.getElementById('v-bg'); v.src = `../${st.man == 'chi' ? 'shen' : 'lin'}_work.mp4`; v.play(); renderStars(); }
+        function startTraining() { 
+            document.getElementById('rule-modal').style.display = 'none'; 
+            document.getElementById('selection-ui').style.display = 'none'; 
+            document.getElementById('focus-mode').style.display = 'block'; 
+            document.getElementById('back-home').style.display = 'block'; 
+            const v = document.getElementById('v-bg'); v.style.display = 'block';
+            const m = st.man === 'chi' ? 'shen' : 'lin';
+            v.src = `../${m}_start.mp4`; v.play();
+            v.onended = () => { v.src = `../${m}_work.mp4`; v.loop = true; v.play(); };
+            renderStars(); 
+        }
         function toggleTimer() { st.active = !st.active; const btn = document.getElementById('ctrl-btn'); const vp = document.getElementById('v-player'); btn.innerText = st.active ? "PAUSE" : "RESUME"; if(st.active) { if(st.time === st.initial) { vp.src = `../${st.man}_${st.mode}_start.wav`; vp.play(); } st.endTime = Date.now() + st.time * 1000; st.itv = setInterval(() => { st.time = Math.max(0, Math.ceil((st.endTime - Date.now()) / 1000)); updateUI(); if(Math.random() < 0.005 && st.time > 20) triggerCheck(); if(st.time <= 0) { clearInterval(st.itv); vp.src = `../${st.man}_${st.mode}_end.wav`; vp.play(); vp.onended = () => backToHall(); } }, 1000); } else { clearInterval(st.itv); } }
-        function triggerCheck() { const v = document.getElementById('v-bg'); const vp = document.getElementById('v-player'); const old = v.src; v.src = `../${st.man == 'chi' ? 'shen' : 'lin'}_look.mp4`; v.loop = false; v.play(); vp.src = `../${st.man}_${st.mode}_mid_1.wav`; vp.play(); v.onended = () => { v.src = old; v.loop = true; v.play(); }; }
+        function triggerCheck() { const v = document.getElementById('v-bg'); const vp = document.getElementById('v-player'); const old = v.src; const m = st.man === 'chi' ? 'shen' : 'lin'; v.src = `../${m}_look.mp4`; v.loop = false; v.play(); vp.src = `../${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`; vp.play(); v.onended = () => { v.src = `../${m}_work.mp4`; v.loop = true; v.play(); }; }
         function showGallery() { const data = datingData[st.man]; const c = parseInt(localStorage.getItem(`pc_v4_${st.man}_count`) || 0); document.getElementById('gallery-title').innerText = st.man==='chi'?'迟砚：绝密实验室':'林深：绝密实验室'; document.getElementById('reward-img').src = data.img; document.getElementById('reward-title-text').innerText = data.title; document.getElementById('reward-story-text').innerText = data.story; document.getElementById('reward-main').classList.toggle('active', c >= 30); document.getElementById('gallery-overlay').style.display = 'flex'; }
         function hideGallery() { document.getElementById('gallery-overlay').style.display = 'none'; }
         function playReward() { if(document.getElementById('reward-main').classList.contains('active')) { document.getElementById('v-player').src = `../${st.man}_secret.wav`; document.getElementById('v-player').play(); } }
         function doSign() { let c = parseInt(localStorage.getItem(`pc_v4_${st.man}_count`) || 0) + 1; localStorage.setItem(`pc_v4_${st.man}_count`, Math.min(c, 30)); renderStars(); alert("同步完成"); }
         function renderStars() { const c = parseInt(localStorage.getItem(`pc_v4_${st.man}_count`) || 0); const g = document.getElementById('star-g'); g.innerHTML = ''; for(let i=0; i<30; i++) g.innerHTML += `<div class="star ${i < c ? 'active' : ''}">✦</div>`; }
         function updateUI() { const m = Math.floor(st.time / 60); const s = (st.time % 60).toString().padStart(2, '0'); document.getElementById('timer').innerText = `${m}:${s}`; }
-        function backToHall() { clearInterval(st.itv); st.time = st.initial; updateUI(); document.getElementById('focus-mode').style.display = 'none'; document.getElementById('selection-ui').style.display = 'block'; document.getElementById('back-home').style.display = 'none'; }
+        function backToHall() { clearInterval(st.itv); st.time = st.initial; updateUI(); document.getElementById('focus-mode').style.display = 'none'; document.getElementById('selection-ui').style.display = 'block'; document.getElementById('back-home').style.display = 'none'; document.getElementById('v-bg').pause(); }
+        function tryFullScreen() { const doc = window.document.documentElement; if(doc.requestFullscreen) doc.requestFullscreen(); else if(doc.webkitRequestFullScreen) doc.webkitRequestFullScreen(); }
     </script>
 </body>
 </html>
