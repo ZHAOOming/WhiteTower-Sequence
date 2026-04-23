@@ -27,30 +27,25 @@
         .char-name { font-size: 32px; color: var(--gold-l); font-weight: bold; letter-spacing: 8px; margin-bottom: 8px; }
         .char-desc { font-size: 13px; color: #bbb; line-height: 1.6; font-style: italic; }
         @media screen and (orientation: landscape) { .carousel-container { transform: none !important; justify-content: center; gap: 30px; padding: 10px; } .char-slide { min-width: 40%; height: 95%; padding: 0; } .card-frame { height: 100%; } .nav-hint { display: none; } .char-info-box { padding: 15px; } .char-name { font-size: 24px; } }
-        
         #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9500; display: none; align-items: center; justify-content: center; padding: 10px; }
-        .gallery-window { background: #0a0a0a; border: 1px solid var(--gold-m); width: 95%; max-width: 550px; padding: 25px; border-radius: 12px; position: relative; }
+        .gallery-window { background: #0a0a0a; border: 1px solid var(--gold-m); width: 95%; max-width: 550px; padding: 25px; border-radius: 12px; }
         .card-scroll-area { max-height: 280px; overflow-y: scroll; margin-bottom: 15px; }
-        .card-scroll-area::-webkit-scrollbar { width: 2px; }
         .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
         .card-unit { display: flex; flex-direction: column; align-items: center; }
         .reward-card { width: 100%; aspect-ratio: 3/4; border: 1px solid #222; position: relative; overflow: hidden; filter: grayscale(1); }
-        .reward-card.active { filter: grayscale(0); border-color: var(--gold-m); box-shadow: 0 0 10px rgba(212,167,63,0.3); }
+        .reward-card.active { filter: grayscale(0); border-color: var(--gold-m); }
         .reward-card img { width: 100%; height: 100%; object-fit: cover; }
         .card-label { font-size: 10px; color: var(--gold-d); margin-top: 8px; letter-spacing: 1px; text-align: center; }
-
         #reward-detail-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 9900; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 30px; text-align: center; }
         .detail-title { color: var(--gold-l); font-size: 20px; font-weight: bold; margin: 20px 0; letter-spacing: 4px; }
         .detail-story { color: #ccc; font-size: 13px; line-height: 1.8; white-space: pre-line; max-width: 400px; }
-
         .timer-panel { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 360px; background: var(--glass); border: 1px solid var(--gold-m); padding: 20px; border-radius: 20px; z-index: 500; backdrop-filter: blur(10px); }
-        @media screen and (orientation: landscape) { .timer-panel { right: 20px; left: auto; transform: none; width: 240px; bottom: 20px; padding: 15px; } #timer { font-size: 40px !important; } }
         #timer { font-size: 56px; font-family: 'Courier New', monospace; color: var(--gold-l); text-align: center; }
         .star-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; margin: 10px 0; }
-        .star { font-size: 10px; color: #1a1a1a; transition: 0.5s; }
-        .star.active { color: var(--gold-m); text-shadow: 0 0 10px var(--gold-m); }
+        .star { font-size: 10px; color: #1a1a1a; }
+        .star.active { color: var(--gold-m); }
         #mode-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 9000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
-        .time-setter { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; border: 1px solid #333; padding: 15px; border-radius: 10px; background: rgba(255,255,255,0.02); }
+        .time-setter { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px; border: 1px solid #333; padding: 15px; border-radius: 10px; }
         .time-btn { width: 45px; height: 45px; border: 1px solid var(--gold-d); color: var(--gold-l); background: none; font-size: 24px; border-radius: 50%; }
         #set-time-display { font-size: 42px; color: var(--gold-m); font-family: 'Courier New', monospace; font-weight: bold; width: 130px; text-align: center; }
         .btn-base { background: none; border: 1px solid var(--gold-m); color: var(--gold-m); padding: 12px; font-weight: bold; width: 100%; max-width: 280px; margin-top: 10px; }
@@ -93,11 +88,11 @@
         <div style="color:var(--gold-m); margin-bottom:20px; letter-spacing:2px; font-size:14px;">调整特训时长</div>
         <div class="time-setter"><button class="time-btn" onclick="adjTime(-5)">-</button><div id="set-time-display">25:00</div><button class="time-btn" onclick="adjTime(5)">+</button></div>
         <button class="btn-base" onclick="confirmMode(1)">陪伴模式</button>
-        <button class="btn-base" style="color:var(--red); border-color:var(--red);" onclick="confirmMode(3)">监管模式</button>
+        <button class="btn-base" style="color:var(--red); border-color:var(--red); margin-top:20px;" onclick="confirmMode(3)">监管模式</button>
     </div>
     <div id="focus-mode" style="display:none; position:relative; width:100%; height:100%;">
-        <video id="v-bg" playsinline muted loop style="position:absolute; width:100%; height:100%; object-fit:cover;"></video>
-        <div class="timer-panel"><div id="timer">25:00</div><div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0;"><button onclick="doSign()" class="btn-base" style="width:70%; margin:0; padding:8px;">DAILY CHECK-IN</button><div onclick="showGallery()" style="font-size:30px;">🎁</div></div><div id="star-g" class="star-grid"></div><button id="ctrl-btn" onclick="toggleTimer()" class="btn-base" style="background:var(--gold-m); color:black;">START</button></div>
+        <video id="v-bg" playsinline muted style="position:absolute; width:100%; height:100%; object-fit:cover;"></video>
+        <div class="timer-panel"><div id="timer">25:00</div><div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0;"><button onclick="doSign()" class="btn-base" style="width:70%; margin:0;">DAILY CHECK-IN</button><div onclick="showGallery()" style="font-size:30px;">🎁</div></div><div id="star-g" class="star-grid"></div><button id="ctrl-btn" onclick="toggleTimer()" class="btn-base" style="background:var(--gold-m); color:black;">START</button></div>
     </div>
     <div id="gallery-overlay" onclick="if(event.target == this) hideGallery()">
         <div class="gallery-window">
@@ -106,7 +101,7 @@
                 <div class="card-grid">
                     <div class="card-unit">
                         <div id="reward-main" class="reward-card" onclick="playReward()"><img id="reward-img" src=""><div id="lock-badge" style="position:absolute; top:5px; right:5px; background:var(--red); padding:2px 5px; font-size:8px;">未授权</div></div>
-                        <div id="card-name-label" class="card-label">加载中...</div>
+                        <div id="card-name-label" class="card-label"></div>
                     </div>
                     <div class="card-unit"><div class="reward-card" style="border-style:dashed; opacity:0.3;"></div><div class="card-label">敬请期待</div></div>
                     <div class="card-unit"><div class="reward-card" style="border-style:dashed; opacity:0.3;"></div><div class="card-label">敬请期待</div></div>
@@ -139,18 +134,54 @@
         function initCarousel() { const el = document.getElementById('selection-ui'); const inner = document.getElementById('carousel'); el.addEventListener('touchstart', e => st.touchX = e.touches[0].clientX); el.addEventListener('touchend', e => { if(window.innerHeight > window.innerWidth) { const diff = st.touchX - e.changedTouches[0].clientX; if (Math.abs(diff) > 50) { st.curIdx = (st.curIdx === 0 ? 1 : 0); inner.style.transform = `translateX(-${st.curIdx * 100}%)`; } } }); }
         function openMode(m) { st.man = m; document.getElementById('mode-modal').style.display = 'flex'; }
         function confirmMode(md) { st.mode = md; document.getElementById('mode-modal').style.display = 'none'; document.getElementById('rule-modal').style.display = 'flex'; }
-        function startTraining() { lockS(); document.getElementById('rule-modal').style.display = 'none'; document.getElementById('selection-ui').style.display = 'none'; document.getElementById('focus-mode').style.display = 'block'; document.getElementById('back-home').style.display = 'block'; const v = document.getElementById('v-bg'); v.style.display = 'block'; const m = st.man === 'chi' ? 'shen' : 'lin'; v.src = `../${m}_start.mp4`; v.play(); v.onended = () => { v.src = `../${m}_work.mp4`; v.loop = true; v.play(); }; renderStars(); }
-        function toggleTimer() { st.active = !st.active; const btn = document.getElementById('ctrl-btn'); const vp = document.getElementById('v-player'); btn.innerText = st.active ? "PAUSE" : "RESUME"; if(st.active) { if(st.time === st.initial) { vp.src = `../${st.man}_${st.mode}_start.wav`; vp.play(); } st.endTime = Date.now() + st.time * 1000; st.itv = setInterval(() => { st.time = Math.max(0, Math.ceil((st.endTime - Date.now()) / 1000)); updateUI(); if(Math.random() < 0.006 && st.time > 30) triggerCheck(); if(st.time <= 0) { clearInterval(st.itv); vp.src = `../${st.man}_${st.mode}_end.wav`; vp.play(); vp.onended = () => backToHall(); } }, 1000); } else { clearInterval(st.itv); } }
-        function triggerCheck() { const v = document.getElementById('v-bg'); const vp = document.getElementById('v-player'); const old = v.src; const m = st.man === 'chi' ? 'shen' : 'lin'; v.src = `../${m}_look.mp4`; v.loop = false; v.play(); vp.src = `../${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`; vp.play(); v.onended = () => { v.src = `../${m}_work.mp4`; v.loop = true; v.play(); }; }
-        function showGallery() { const data = datingData[st.man]; const c = parseInt(localStorage.getItem(`pc_v4_${st.man}_count`) || 0); document.getElementById('gallery-title').innerText = st.man==='chi'?'迟砚：记录图鉴':'林深：记录图鉴'; document.getElementById('reward-img').src = data.img; const card = document.getElementById('reward-main'); 
-            /* 关键修改：名字不再受30天限制，始终显示真实标题 */
-            document.getElementById('card-name-label').innerText = data.title.split('：')[1];
-            if(c >= 30) { card.classList.add('active'); document.getElementById('lock-badge').style.display = 'none'; } 
-            else { card.classList.remove('active'); document.getElementById('lock-badge').style.display = 'block'; } 
-            document.getElementById('gallery-overlay').style.display = 'flex'; 
+        
+        function startTraining() { 
+            lockS(); document.getElementById('rule-modal').style.display = 'none'; 
+            document.getElementById('selection-ui').style.display = 'none'; 
+            document.getElementById('focus-mode').style.display = 'block'; 
+            document.getElementById('back-home').style.display = 'block'; 
+            const v = document.getElementById('v-bg'); v.style.display = 'block'; 
+            const m_name = st.man === 'chi' ? 'shen' : 'lin';
+            // 精准修复处：移除所有可能冲突的 onended 逻辑，确保流程单一向
+            v.src = `../${m_name}_start.mp4`; v.loop = false; v.onended = null; // 清空残留
+            v.play();
+            // 使用一次性监听器，确保只从 start 跳到 work
+            v.addEventListener('ended', function goWork() {
+                v.src = `../${m_name}_work.mp4`; v.loop = true; v.play();
+                v.removeEventListener('ended', goWork);
+            }, { once: true });
+            renderStars(); 
         }
+
+        function toggleTimer() { 
+            st.active = !st.active; const btn = document.getElementById('ctrl-btn'); const vp = document.getElementById('v-player');
+            btn.innerText = st.active ? "PAUSE" : "RESUME";
+            if(st.active) {
+                if(st.time === st.initial) { vp.src = `../${st.man}_${st.mode}_start.wav`; vp.play(); }
+                st.endTime = Date.now() + st.time * 1000;
+                st.itv = setInterval(() => {
+                    st.time = Math.max(0, Math.ceil((st.endTime - Date.now()) / 1000));
+                    updateUI();
+                    if(Math.random() < 0.006 && st.time > 30) triggerCheck();
+                    if(st.time <= 0) { 
+                        clearInterval(st.itv); vp.src = `../${st.man}_${st.mode}_end.wav`; vp.play();
+                        vp.onended = () => backToHall();
+                    }
+                }, 1000);
+            } else { clearInterval(st.itv); }
+        }
+
+        function triggerCheck() {
+            const v = document.getElementById('v-bg'); const vp = document.getElementById('v-player');
+            const m_name = st.man === 'chi' ? 'shen' : 'lin';
+            v.src = `../${m_name}_look.mp4`; v.loop = false; v.play();
+            vp.src = `../${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`; vp.play();
+            v.onended = () => { v.src = `../${m_name}_work.mp4`; v.loop = true; v.play(); };
+        }
+
+        function showGallery() { const data = datingData[st.man]; const c = parseInt(localStorage.getItem(`pc_v4_${st.man}_count`) || 0); document.getElementById('gallery-title').innerText = st.man==='chi'?'迟砚：记录图鉴':'林深：记录图鉴'; document.getElementById('reward-img').src = data.img; document.getElementById('card-name-label').innerText = data.title.split('：')[1]; const card = document.getElementById('reward-main'); if(c >= 30) { card.classList.add('active'); document.getElementById('lock-badge').style.display = 'none'; } else { card.classList.remove('active'); document.getElementById('lock-badge').style.display = 'block'; } document.getElementById('gallery-overlay').style.display = 'flex'; }
         function hideGallery() { document.getElementById('gallery-overlay').style.display = 'none'; }
-        function playReward() { const c = parseInt(localStorage.getItem(`pc_v4_${st.man}_count`) || 0); if(c >= 30) { const data = datingData[st.man]; document.getElementById('detail-title-text').innerText = data.title; document.getElementById('detail-story-text').innerText = data.story; document.getElementById('zoom-img').src = data.img; document.getElementById('reward-detail-mask').style.display = 'flex'; document.getElementById('v-player').src = `../${st.man}_secret.wav`; document.getElementById('v-player').play(); } else { alert("特训天数不足 30 天。"); } }
+        function playReward() { const c = parseInt(localStorage.getItem(`pc_v4_${st.man}_count`) || 0); if(c >= 30) { const data = datingData[st.man]; document.getElementById('detail-title-text').innerText = data.title; document.getElementById('detail-story-text').innerText = data.story; document.getElementById('zoom-img').src = data.img; document.getElementById('reward-detail-mask').style.display = 'flex'; document.getElementById('v-player').src = `../${st.man}_secret.wav`; document.getElementById('v-player').play(); } else { alert("特训天数不足。"); } }
         function doSign() { const d = new Date().toDateString(); const key = `pc_v4_${st.man}_sign`; if(localStorage.getItem(key) === d) { alert("今日已签到。"); return; } let c = parseInt(localStorage.getItem(`pc_v4_${st.man}_count`) || 0) + 1; localStorage.setItem(`pc_v4_${st.man}_count`, Math.min(c, 30)); localStorage.setItem(key, d); renderStars(); alert("同步完成"); }
         function renderStars() { const c = parseInt(localStorage.getItem(`pc_v4_${st.man}_count`) || 0); const g = document.getElementById('star-g'); g.innerHTML = ''; for(let i=0; i<30; i++) g.innerHTML += `<div class="star ${i < c ? 'active' : ''}">✦</div>`; }
         function updateUI() { const m = Math.floor(st.time / 60); const s = (st.time % 60).toString().padStart(2, '0'); document.getElementById('timer').innerText = `${m}:${s}`; }
