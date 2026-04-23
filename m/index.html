@@ -17,52 +17,57 @@
         .auth-input { background: rgba(255,255,255,0.05); border: 1px solid var(--gold-d); color: white; padding: 15px; text-align: center; width: 280px; margin-bottom: 20px; outline: none; border-radius: 0; }
         .auth-btn { background: var(--gold-m); color: black; border: none; padding: 15px 60px; font-weight: bold; letter-spacing: 5px; }
 
-        /* 2. 选择界面 */
-        #selection-ui { position: relative; width: 100%; height: 100%; z-index: 10; display: none; background: #000; }
+        /* 2. 选择界面：App级滑动 & 响应式双人并排 */
+        #selection-ui { position: relative; width: 100%; height: 100%; z-index: 10; display: none; background: #000; overflow: hidden; }
         .carousel-container { display: flex; height: 100%; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
         .char-slide { min-width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; position: relative; }
         .char-portrait { width: 100%; height: 90vh; background-size: contain; background-repeat: no-repeat; background-position: center bottom; transition: 0.5s; }
-        .char-info-box { position: absolute; bottom: 12vh; width: 88%; background: var(--glass); border-left: 5px solid var(--gold-m); padding: 25px; backdrop-filter: blur(15px); }
-        .char-name { font-size: 32px; color: var(--gold-l); font-weight: bold; letter-spacing: 6px; margin-bottom: 8px; }
-        .char-desc { font-size: 14px; color: #ccc; line-height: 1.6; }
+        .char-info-box { position: absolute; bottom: 10vh; width: 88%; background: var(--glass); border-left: 5px solid var(--gold-m); padding: 25px; backdrop-filter: blur(15px); }
+        .char-name { font-size: 28px; color: var(--gold-l); font-weight: bold; letter-spacing: 6px; margin-bottom: 5px; }
+        .char-desc { font-size: 13px; color: #ccc; line-height: 1.6; font-style: italic; }
 
-        /* 3. 引导提示与按钮 */
-        .nav-hint { position: absolute; top: 10vh; width: 100%; text-align: center; color: var(--gold-m); font-size: 12px; letter-spacing: 2px; opacity: 0.6; pointer-events: none; }
-        .btn-base { background: none; border: 1px solid var(--gold-m); color: var(--gold-m); padding: 12px; font-weight: bold; width: 100%; margin-top: 15px; transition: 0.3s; }
-        .btn-base:active { background: var(--gold-m); color: black; }
+        /* 横屏自适应：恢复双人位 */
+        @media screen and (orientation: landscape) {
+            .carousel-container { transform: none !important; justify-content: center; gap: 40px; }
+            .char-slide { min-width: 45%; }
+            .nav-hint { display: none; }
+            .char-info-box { padding: 15px; bottom: 5vh; }
+        }
 
-        /* 4. 模式选择与准则 */
-        #mode-modal, #rule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 9000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 40px; text-align: center; }
-        .mode-card { width: 100%; max-width: 300px; padding: 25px; margin: 15px 0; background: #0a0a0a; border: 1px solid #333; transition: 0.3s; }
-        .mode-card.special { border-color: var(--red); color: var(--red); }
-        .rule-window { background: #0a0a0a; border: 1px solid var(--gold-m); padding: 30px; width: 100%; max-width: 400px; }
-        .rule-item { text-align: left; font-size: 13px; color: #ccc; margin-bottom: 12px; list-style: none; position: relative; padding-left: 20px; }
+        /* 3. 引导提示 */
+        .nav-hint { position: absolute; top: 10vh; width: 100%; text-align: center; color: var(--gold-m); font-size: 12px; letter-spacing: 2px; opacity: 0.7; z-index: 20; }
+
+        /* 4. 计时面板适配 */
+        .timer-panel { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 360px; background: var(--glass); border: 1px solid var(--gold-d); padding: 20px; border-radius: 20px; z-index: 500; backdrop-filter: blur(10px); }
+        @media screen and (orientation: landscape) {
+            .timer-panel { right: 20px; left: auto; transform: none; width: 260px; bottom: 20px; }
+            #timer { font-size: 44px !important; }
+        }
+        #timer { font-size: 56px; font-family: 'Courier New', monospace; color: var(--gold-l); text-align: center; }
+        .star-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin: 10px 0; }
+        .star { font-size: 10px; color: #1a1a1a; }
+        .star.active { color: var(--gold-m); }
+
+        /* 5. 准则与画廊弹窗 */
+        #rule-modal, #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9500; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .window-base { background: #0a0a0a; border: 1px solid var(--gold-m); padding: 30px; width: 90%; max-width: 400px; text-align: center; }
+        .rule-item { text-align: left; font-size: 13px; color: #ccc; margin-bottom: 12px; position: relative; padding-left: 20px; list-style: none; }
         .rule-item::before { content: '✦'; position: absolute; left: 0; color: var(--gold-m); }
 
-        /* 5. 计时器与视频适配 */
-        #v-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none; }
-        .timer-panel { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 92%; background: var(--glass); border: 1px solid var(--gold-d); padding: 20px; border-radius: 20px; z-index: 500; backdrop-filter: blur(10px); }
-        #timer { font-size: 60px; font-family: 'Courier New', monospace; color: var(--gold-l); text-align: center; }
-        .star-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; margin: 10px 0; }
-        .star { font-size: 12px; color: #1a1a1a; }
-        .star.active { color: var(--gold-m); text-shadow: 0 0 10px var(--gold-m); }
-
-        /* 6. 奖励画廊同步PC完美版 */
-        #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 9800; display: none; align-items: center; justify-content: center; }
-        .reward-card { width: 85vw; height: 113vw; border: 1px solid #222; position: relative; overflow: hidden; filter: grayscale(1); transition: 0.5s; }
+        .reward-card { width: 100%; aspect-ratio: 3/4; border: 1px solid #222; overflow: hidden; filter: grayscale(1); transition: 0.5s; position: relative; }
         .reward-card.active { filter: grayscale(0); border-color: var(--gold-m); }
         .reward-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
         .reward-card.active img { opacity: 1; }
-        .reward-intro { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.95) 70%, transparent); padding: 20px; }
-        .lock-badge { position: absolute; top: 10px; right: 10px; background: var(--red); color: #fff; font-size: 10px; padding: 4px 10px; }
 
-        #back-home { position: fixed; top: env(safe-area-inset-top, 25px); left: 20px; z-index: 8500; display: none; }
+        .btn-base { background: none; border: 1px solid var(--gold-m); color: var(--gold-m); padding: 12px; font-weight: bold; width: 100%; margin-top: 10px; }
+        #back-home { position: fixed; top: env(safe-area-inset-top, 20px); left: 20px; z-index: 8500; display: none; }
+        #v-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none; }
     </style>
 </head>
 <body onclick="tryFullScreen()">
 
     <div id="entry-mask">
-        <div class="tower-logo">白塔序列<br><span style="font-size:12px; letter-spacing:4px; opacity:0.7;">感官链接终端 (MOBILE)</span></div>
+        <div class="tower-logo">白塔序列<br><span style="font-size:12px; letter-spacing:4px; opacity:0.7;">首席监考官·接入终端</span></div>
         <input type="password" id="auth-code" class="auth-input" placeholder="输入特训授权码">
         <button onclick="_0x5a21()" class="auth-btn">身份接入</button>
     </div>
@@ -70,14 +75,14 @@
     <button id="back-home" class="btn-base" style="width:auto; border-radius:20px;" onclick="backToHall()">◀ BACK TO HALL</button>
 
     <div id="selection-ui">
-        <div class="nav-hint">左右滑动切换监考官<br>点击立绘感官链接</div>
+        <div class="nav-hint">左右滑动切换监考官<br><span style="color:var(--gold-d); font-size:10px;">点击立绘触发语音互动</span></div>
         <div class="carousel-container" id="carousel">
             <div class="char-slide">
                 <div class="char-portrait" style="background-image:url('../shen.png')" onclick="playVoice('chi')"></div>
                 <div class="char-info-box">
                     <div class="char-name">迟 砚</div>
                     <div class="char-desc">“笔尖停得太久了。如果不想要这双手，我可以帮帮你。”</div>
-                    <button class="btn-base" onclick="openSet('chi')">确 认 接 入</button>
+                    <button class="btn-base" onclick="openMode('chi')">确 认 接 入</button>
                 </div>
             </div>
             <div class="char-slide">
@@ -85,26 +90,27 @@
                 <div class="char-info-box">
                     <div class="char-name">林 深</div>
                     <div class="char-desc">“乖一点。等计时器归零，我会给你想要的奖励。”</div>
-                    <button class="btn-base" onclick="openSet('lin')">确 认 接 入</button>
+                    <button class="btn-base" onclick="openMode('lin')">确 认 接 入</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="mode-modal">
-        <h3 style="color:var(--gold-m); margin-bottom:30px;">选择特训逻辑</h3>
-        <div class="mode-card" onclick="confirmMode(1)">陪伴模式<br><span style="font-size:10px; opacity:0.5;">COMPANION</span></div>
-        <div class="mode-card special" onclick="confirmMode(3)">监管模式<br><span style="font-size:10px; opacity:0.5;">REGULATION</span></div>
-    </div>
-
     <div id="rule-modal">
-        <div class="rule-window">
-            <div style="color:var(--gold-m); font-weight:900; margin-bottom:25px;">「白塔序列」特训准则</div>
+        <div class="window-base">
+            <div style="color:var(--gold-m); font-weight:bold; margin-bottom:20px; letter-spacing:2px;">「白塔序列」特训准则</div>
             <div class="rule-item">监考官将全程实时监控您的学习进度。</div>
             <div class="rule-item">计时开始后，点击 DAILY CHECK-IN 完成今日打卡。</div>
-            <div class="rule-item">每累积签到 30 天，可解锁绝密实验室记录。</div>
+            <div class="rule-item">累积签到 30 天，激活对应监考官绝密实验室记录。</div>
+            <div class="rule-item" style="color:var(--gold-l);">建议横屏放置设备，以获得最佳监控全景视野。</div>
             <button class="btn-base" style="background:var(--gold-m); color:black; border:none;" onclick="startTraining()">接受特训</button>
         </div>
+    </div>
+
+    <div id="mode-modal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:9000; display:none; flex-direction:column; justify-content:center; align-items:center; padding:40px;">
+        <div style="color:var(--gold-m); margin-bottom:30px;">选择特训逻辑</div>
+        <button class="btn-base" onclick="confirmMode(1)">陪伴模式</button>
+        <button class="btn-base" style="color:var(--red); border-color:var(--red);" onclick="confirmMode(3)">监管模式</button>
     </div>
 
     <div id="focus-mode" style="display:none; position:relative; width:100%; height:100%;">
@@ -112,26 +118,26 @@
         <div class="timer-panel">
             <div id="timer">25:00</div>
             <div style="display:flex; justify-content:space-between; align-items:center; margin:10px 0;">
-                <button onclick="doSign()" class="btn-base" style="width:70%; margin:0; padding:8px;">DAILY CHECK-IN</button>
-                <div onclick="showGallery()" style="font-size:30px;">🎁</div>
+                <button onclick="doSign()" class="btn-base" style="width:75%; margin:0; padding:8px;">CHECK-IN</button>
+                <div onclick="showGallery()" style="font-size:28px;">🎁</div>
             </div>
             <div id="star-g" class="star-grid"></div>
-            <button id="ctrl-btn" onclick="toggleTimer()" class="btn-base" style="background:var(--gold-m); color:black; border:none; height:55px; font-weight:900;">START</button>
+            <button id="ctrl-btn" onclick="toggleTimer()" class="btn-base" style="background:var(--gold-m); color:black; border:none; height:50px;">START</button>
         </div>
     </div>
 
     <div id="gallery-overlay" onclick="if(event.target == this) hideGallery()">
-        <div class="gallery-window">
-            <h3 id="gallery-title" style="color:var(--gold-m); text-align:center;"></h3>
+        <div class="window-base">
+            <h3 id="gallery-title" style="color:var(--gold-m);"></h3>
             <div id="reward-main" class="reward-card" onclick="playReward()">
-                <div id="lock-badge" class="lock-badge">未授权</div>
+                <div id="lock-badge" style="position:absolute; top:10px; right:10px; background:var(--red); padding:3px 8px; font-size:10px;">未授权</div>
                 <img id="reward-img" src="">
-                <div class="reward-intro">
+                <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(to top, #000, transparent); padding:20px; text-align:left;">
                     <div id="reward-title-text" style="color:var(--gold-m); font-weight:bold;"></div>
-                    <div id="reward-story-text" style="font-size:12px; color:#ddd; white-space:pre-line; margin-top:8px;"></div>
+                    <div id="reward-story-text" style="font-size:12px; color:#ddd; white-space:pre-line; margin-top:5px;"></div>
                 </div>
             </div>
-            <button onclick="hideGallery()" style="background:none; border:none; color:#555; width:100%; margin-top:15px; text-decoration:underline;">关闭档案</button>
+            <button onclick="hideGallery()" class="btn-base" style="border:none; text-decoration:underline;">关闭</button>
         </div>
     </div>
 
@@ -151,15 +157,15 @@
                 document.getElementById('entry-mask').style.display = 'none';
                 document.getElementById('selection-ui').style.display = 'block';
                 initCarousel();
-                const mp = document.getElementById('m-player');
-                mp.src = '../bgm_1.mp3'; mp.volume = 0.2; mp.play();
-            } else { alert("接入失败"); }
+                document.getElementById('m-player').src = '../bgm_1.mp3';
+                document.getElementById('m-player').volume = 0.2;
+                document.getElementById('m-player').play();
+            } else { alert("接入授权失败"); }
         }
 
         function playVoice(m) {
-            const vp = document.getElementById('v-player');
-            vp.src = `../${m}_select.wav`;
-            vp.play();
+            document.getElementById('v-player').src = `../${m}_select.wav`;
+            document.getElementById('v-player').play();
         }
 
         function initCarousel() {
@@ -167,32 +173,24 @@
             const inner = document.getElementById('carousel');
             el.addEventListener('touchstart', e => st.touchX = e.touches[0].clientX);
             el.addEventListener('touchend', e => {
-                const diff = st.touchX - e.changedTouches[0].clientX;
-                if (Math.abs(diff) > 50) {
-                    st.curIdx = diff > 0 ? Math.min(st.curIdx + 1, 1) : Math.max(st.curIdx - 1, 0);
-                    inner.style.transform = `translateX(-${st.curIdx * 100}%)`;
+                if(window.innerHeight > window.innerWidth) { // 仅竖屏可滑动
+                    const diff = st.touchX - e.changedTouches[0].clientX;
+                    if (Math.abs(diff) > 50) {
+                        st.curIdx = diff > 0 ? Math.min(st.curIdx + 1, 1) : Math.max(st.curIdx - 1, 0);
+                        inner.style.transform = `translateX(-${st.curIdx * 100}%)`;
+                    }
                 }
             });
         }
 
-        function openSet(m) { st.man = m; document.getElementById('mode-modal').style.display = 'flex'; }
-        
-        function confirmMode(md) {
-            st.mode = md;
-            document.getElementById('mode-modal').style.display = 'none';
-            document.getElementById('rule-modal').style.display = 'flex';
-        }
+        function openMode(m) { st.man = m; document.getElementById('mode-modal').style.display = 'flex'; }
+        function confirmMode(md) { st.mode = md; document.getElementById('mode-modal').style.display = 'none'; document.getElementById('rule-modal').style.display = 'flex'; }
 
         function startTraining() {
-            // 移动端关键修复：在用户点击按钮时激活 AudioContext
-            const vp = document.getElementById('v-player');
-            vp.play().catch(()=>{}); vp.pause(); // 预激活通道
-
             document.getElementById('rule-modal').style.display = 'none';
             document.getElementById('selection-ui').style.display = 'none';
             document.getElementById('focus-mode').style.display = 'block';
             document.getElementById('back-home').style.display = 'block';
-            
             const v = document.getElementById('v-bg');
             v.style.display = 'block';
             v.src = `../${st.man == 'chi' ? 'shen' : 'lin'}_work.mp4`;
@@ -207,25 +205,17 @@
             btn.innerText = st.active ? "PAUSE" : "RESUME";
 
             if(st.active) {
-                // START 语音逻辑：仅在第一次启动时播放
                 if(st.time === st.initial) {
-                    vp.src = `../${st.man}_${st.mode}_start.wav`;
-                    vp.play().catch(e=>console.log(e));
+                    vp.src = `../${st.man}_${st.mode}_start.wav`; vp.play();
                 }
-                
                 st.endTime = Date.now() + st.time * 1000;
                 st.timerInterval = setInterval(() => {
                     st.time = Math.max(0, Math.ceil((st.endTime - Date.now()) / 1000));
                     updateTimerUI();
-                    
-                    // MID 随机查岗逻辑
                     if(Math.random() < 0.005 && st.time > 20) triggerCheck();
-                    
-                    // END 语音逻辑
                     if(st.time <= 0) {
                         clearInterval(st.timerInterval);
-                        vp.src = `../${st.man}_${st.mode}_end.wav`;
-                        vp.play();
+                        vp.src = `../${st.man}_${st.mode}_end.wav`; vp.play();
                         vp.onended = () => backToHall();
                     }
                 }, 1000);
@@ -236,50 +226,32 @@
             const v = document.getElementById('v-bg');
             const vp = document.getElementById('v-player');
             const old = v.src;
-            // 切换查岗视频
             v.src = `../${st.man == 'chi' ? 'shen' : 'lin'}_look.mp4`;
             v.loop = false; v.play();
-            // 播放 MID 随机语音
-            vp.src = `../${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`;
-            vp.play();
+            vp.src = `../${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`; vp.play();
             v.onended = () => { v.src = old; v.loop = true; v.play(); };
         }
 
         function showGallery() {
             const data = datingData[st.man];
             const count = parseInt(localStorage.getItem(`pc_v4_${st.man}_count`) || 0);
-            document.getElementById('gallery-title').innerText = st.man==='chi'?'迟砚·秘密实验室':'林深·秘密实验室';
+            document.getElementById('gallery-title').innerText = st.man==='chi'?'迟砚·实验室档案':'林深·实验室档案';
             document.getElementById('reward-img').src = data.img;
             document.getElementById('reward-title-text').innerText = data.title;
             document.getElementById('reward-story-text').innerText = data.story;
             const card = document.getElementById('reward-main');
-            if(count >= 30) {
-                card.classList.add('active');
-                document.getElementById('lock-badge').style.display = 'none';
-            } else {
-                card.classList.remove('active');
-                document.getElementById('lock-badge').style.display = 'block';
-            }
+            card.classList.toggle('active', count >= 30);
             document.getElementById('gallery-overlay').style.display = 'flex';
         }
 
         function hideGallery() { document.getElementById('gallery-overlay').style.display = 'none'; }
-        
-        function playReward() {
-            if(document.getElementById('reward-main').classList.contains('active')){
-                const vp = document.getElementById('v-player');
-                vp.src = `../${st.man}_secret.wav`; vp.play();
-            }
-        }
-
+        function playReward() { if(document.getElementById('reward-main').classList.contains('active')) { document.getElementById('v-player').src = `../${st.man}_secret.wav`; document.getElementById('v-player').play(); } }
         function doSign() {
             const key = `pc_v4_${st.man}_count`;
             let c = parseInt(localStorage.getItem(key) || 0) + 1;
             localStorage.setItem(key, Math.min(c, 30));
             renderStars();
-            // 播放一次随机语音作为反馈
-            const vp = document.getElementById('v-player');
-            vp.src = `../${st.man}_${st.mode}_mid_1.wav`; vp.play();
+            alert("同步成功。");
         }
 
         function renderStars() {
@@ -297,10 +269,8 @@
 
         function backToHall() {
             st.active = false; clearInterval(st.timerInterval);
-            st.time = st.initial; updateTimerUI();
             document.getElementById('focus-mode').style.display = 'none';
             document.getElementById('selection-ui').style.display = 'block';
-            document.getElementById('back-home').style.display = 'none';
             document.getElementById('v-bg').pause();
         }
 
