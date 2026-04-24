@@ -11,11 +11,17 @@
         :root { --gold-l: #f9e194; --gold-m: #d4a73f; --gold-d: #7a5a12; --black-b: #080808; --red: #8b0000; --glass: rgba(0,0,0,0.88); }
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
         body, html { margin: 0; padding: 0; height: 100%; background: #000; overflow: hidden; font-family: "PingFang SC", sans-serif; color: white; user-select: none; }
-        #v-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; display: none; background: #000; }
+        
+        /* AB视频节点逻辑：物理消灭黑屏 */
+        .v-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; display: none; background: #000; }
+        .v-node { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.3s; }
+        .v-active { opacity: 1; z-index: 2; }
+
         #entry-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%); z-index: 10000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         .tower-logo { font-size: 24px; letter-spacing: 10px; color: var(--gold-l); margin-bottom: 40px; font-weight: 900; text-shadow: 0 0 15px var(--gold-m); text-align: center; }
         .auth-input { background: rgba(255,255,255,0.05); border: 1px solid var(--gold-d); color: white; padding: 15px; text-align: center; width: 280px; margin-bottom: 20px; outline: none; border-radius: 0; }
         .auth-btn { background: var(--gold-m); color: black; border: none; padding: 15px 60px; font-weight: bold; letter-spacing: 5px; }
+        
         #selection-ui { position: relative; width: 100%; height: 100%; z-index: 10; display: none; background: #000; overflow: hidden; }
         .carousel-container { display: flex; height: 100%; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
         .char-slide { min-width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; }
@@ -23,10 +29,12 @@
         .char-portrait { position: absolute; top: -5%; left: 0; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center center; z-index: 1; }
         .nav-hint { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center; color: var(--gold-l); font-size: 14px; letter-spacing: 4px; text-shadow: 0 0 10px var(--gold-m); opacity: 0.8; z-index: 5; animation: pulse 2s infinite; pointer-events: none; }
         @keyframes pulse { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+        
         .char-info-box { position: relative; z-index: 10; width: 100%; background: linear-gradient(0deg, rgba(0,0,0,0.95) 70%, transparent); padding: 30px 20px; margin-top: -20px; }
         .char-name { font-size: 32px; color: var(--gold-l); font-weight: bold; letter-spacing: 8px; margin-bottom: 8px; }
         .char-desc { font-size: 13px; color: #bbb; line-height: 1.6; font-style: italic; }
 
+        /* 音量面板 */
         #vol-btn { position: fixed; top: 20px; right: 20px; z-index: 9500; display: none; color: var(--gold-m); font-size: 24px; cursor: pointer; background: rgba(0,0,0,0.6); width: 44px; height: 44px; line-height: 44px; text-align: center; border-radius: 50%; border: 1px solid var(--gold-d); }
         #vol-panel { position: fixed; top: 75px; right: 20px; z-index: 9500; display: none; background: var(--glass); border: 1px solid var(--gold-m); padding: 15px; border-radius: 15px; backdrop-filter: blur(10px); }
         .vol-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; color: var(--gold-l); font-size: 10px; }
@@ -40,20 +48,26 @@
         .star.active { color: var(--gold-m); }
         .btn-base { background: none; border: 1px solid var(--gold-m); color: var(--gold-m); padding: 12px; font-weight: bold; width: 100%; max-width: 280px; margin-top: 10px; }
 
-        #reward-detail-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 11000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-        .detail-card-box { width: 250px; height: 333px; border: 1px solid var(--gold-m); overflow: hidden; margin-bottom: 15px; position: relative; }
-        .story-container { position: relative; width: 100%; max-height: 220px; overflow: hidden; margin-bottom: 20px; }
-        .detail-story-scroll { color: #aaa; font-size: 13px; line-height: 1.8; padding: 0 20px; font-style: italic; white-space: pre-line; text-align: left; height: 220px; overflow-y: auto; }
-        .story-lock-layer { position: absolute; top: 3.8em; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.95) 15%, #000 60%); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
-
-        #back-home { position: fixed; top: env(safe-area-inset-top, 20px); left: 20px; z-index: 8500; display: none; background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px; font-size: 12px; border: 1px solid var(--gold-m); color: var(--gold-m); }
-        #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9500; display: none; align-items: center; justify-content: center; }
+        /* 图鉴排列修复 */
+        #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10500; display: none; align-items: center; justify-content: center; }
         .gallery-window { background: #0a0a0a; border: 1px solid var(--gold-m); width: 92%; max-width: 500px; padding: 20px; border-radius: 12px; }
         .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
         .reward-card { width: 100%; aspect-ratio: 3/4; border: 1px solid #222; filter: grayscale(1); position: relative; overflow: hidden; }
         .reward-card.active { filter: grayscale(0); border-color: var(--gold-m); }
         .reward-card img { width: 100%; height: 100%; object-fit: cover; }
         .card-label { font-size: 9px; color: var(--gold-d); margin-top: 5px; text-align: center; }
+
+        /* 详情锁死逻辑 */
+        #reward-detail-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 11000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .detail-card-box { width: 250px; height: 333px; border: 1px solid var(--gold-m); overflow: hidden; margin-bottom: 15px; }
+        .story-container { position: relative; width: 100%; max-height: 220px; overflow: hidden; margin-bottom: 20px; }
+        .detail-story-scroll { color: #aaa; font-size: 13px; line-height: 1.8; padding: 0 20px; font-style: italic; white-space: pre-line; text-align: left; height: 220px; }
+        .story-lock-layer { position: absolute; top: 3.8em; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.95) 15%, #000 60%); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
+
+        #back-home { position: fixed; top: env(safe-area-inset-top, 20px); left: 20px; z-index: 8500; display: none; background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px; font-size: 12px; border: 1px solid var(--gold-m); color: var(--gold-m); }
+        #mode-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 12000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
+        #rule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 13000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .rule-window { background: #0a0a0a; border: 1px solid var(--gold-m); padding: 40px; text-align: center; width: 450px; max-width: 90%; }
     </style>
 </head>
 <body onclick="tryFullScreen()">
@@ -72,14 +86,15 @@
 
     <div id="selection-ui">
         <div class="carousel-container" id="carousel">
-            <div class="char-slide"><div class="card-frame" onclick="playVoice('chi')"><div class="nav-hint">点击立绘互动 / 左右滑动切换</div><div class="char-portrait" style="background-image:url('../shen.png')"></div><div class="char-info-box"><div class="char-name">迟 砚</div><div class="char-desc">“笔尖停得太久了。如果不想要这双手，我可以帮帮你。”</div><button class="btn-base" onclick="event.stopPropagation(); openMode('chi')">确认接入</button></div></div></div>
-            <div class="char-slide"><div class="card-frame" onclick="playVoice('lin')"><div class="nav-hint">点击立绘互动 / 左右滑动切换</div><div class="char-portrait" style="background-image:url('../lin.png')"></div><div class="char-info-box"><div class="char-name">林 深</div><div class="char-desc">“乖一点。等计时器归零，我会给你想要的奖励。”</div><button class="btn-base" onclick="event.stopPropagation(); openMode('lin')">确认接入</button></div></div></div>
+            <div class="char-slide"><div class="card-frame" onclick="playVoice('chi')"><div class="nav-hint">点击互动 / 左右滑动切换</div><div class="char-portrait" style="background-image:url('../shen.png')"></div><div class="char-info-box"><div class="char-name">迟 砚</div><div class="char-desc">“笔尖停得太久了。如果不想要这双手，我可以帮帮你。”</div><button class="btn-base" onclick="openMode('chi')">确认接入</button></div></div></div>
+            <div class="char-slide"><div class="card-frame" onclick="playVoice('lin')"><div class="nav-hint">点击互动 / 左右滑动切换</div><div class="char-portrait" style="background-image:url('../lin.png')"></div><div class="char-info-box"><div class="char-name">林 深</div><div class="char-desc">“乖一点。等计时器归零，我会给你想要的奖励。”</div><button class="btn-base" onclick="openMode('lin')">确认接入</button></div></div></div>
         </div>
     </div>
 
-    <div id="focus-mode" style="display:none; position:relative; width:100%; height:100%;">
-        <video id="v-bg" playsinline webkit-playsinline muted style="position:absolute; width:100%; height:100%; object-fit:cover;"></video>
-        <div id="main-panel" class="timer-panel">
+    <div id="focus-mode" class="v-container">
+        <video id="v1" class="v-node" playsinline webkit-playsinline muted></video>
+        <video id="v2" class="v-node" playsinline webkit-playsinline muted></video>
+        <div id="main-panel" class="timer-panel" style="z-index:100;">
             <div id="t-collapse" onclick="collapseP()" style="position:absolute; top:10px; right:15px; font-size:10px; color:var(--gold-d);">[收起]</div>
             <div id="timer">25:00</div>
             <div id="p-body">
@@ -101,23 +116,38 @@
         <div onclick="closeDetail()" style="color:#555; font-size:11px; margin-top:40px; text-decoration:underline;">关闭档案</div>
     </div>
 
-    <div id="rule-modal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:11500; display:none; align-items:center; justify-content:center; backdrop-filter:blur(10px);"><div class="rule-window"><div style="color:var(--gold-m); font-size:20px; font-weight:900; letter-spacing:5px; margin-bottom:25px;">「白塔序列」特训准则</div><ul style="text-align:left; color:#ccc; font-size:14px; line-height:1.8; list-style:none; padding:0 20px;"><li>✦ 监考官将全程实时监控您的学习进度。</li><li>✦ 每累积签到 30 天，可激活绝密感官记录。</li><li>✦ 特训期间请保持专注，随机查岗随时降临。</li><li>✦ 严禁中途非授权断开连接。</li></ul><button class="btn-base" style="background:var(--gold-m); color:black; border:none;" onclick="startTraining()">接受特训</button></div></div>
-    <div id="mode-modal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.98); z-index:11000; display:none; flex-direction:column; justify-content:center; align-items:center; padding:40px;">
+    <div id="rule-modal"><div class="rule-window"><div class="rule-title">「白塔序列」特训准则</div><ul style="text-align:left; color:#ccc; font-size:14px; line-height:1.8; list-style:none; padding:0 20px;"><li>✦ 监考官将全程实时监控您的学习进度。</li><li>✦ 每累积签到 30 天，可激活绝密感官记录。</li><li>✦ 特训期间请保持专注，随机查岗随时降临。</li><li>✦ 严禁中途非授权断开连接。</li></ul><button class="btn-base" style="background:var(--gold-m); color:black;" onclick="startTraining()">接受特训</button></div></div>
+    
+    <div id="mode-modal">
         <div style="color:var(--gold-m); margin-bottom:20px; font-size:14px;">调整特训时长</div>
         <div style="display:flex; align-items:center; justify-content:center; gap:20px; margin-bottom:30px;"><button class="auth-btn" style="padding:10px 20px; width:50px;" onclick="adjTime(-5)">-</button><div id="set-time-display" style="font-size:42px; color:var(--gold-m); font-family:monospace; width:130px; text-align:center;">25:00</div><button class="auth-btn" style="padding:10px 20px; width:50px;" onclick="adjTime(5)">+</button></div>
         <button class="btn-base" onclick="confirmMode(1)">陪伴模式</button><button class="btn-base" style="color:var(--red); border-color:var(--red); margin-top:20px;" onclick="confirmMode(3)">监管模式</button>
     </div>
-    <div id="gallery-overlay" onclick="if(event.target == this) hideGallery()"><div class="gallery-window"><h3 style="color:var(--gold-m); text-align:center; font-size:14px; margin-top:0;">感官记录图鉴</h3><div class="card-scroll-area"><div class="card-grid" id="card-grid-body"><div class="card-unit"><div id="reward-main" class="reward-card" onclick="playReward()"><img id="reward-img" src=""><div id="lock-badge" style="position:absolute; top:5px; right:5px; background:var(--red); padding:2px 5px; font-size:8px;">未授权</div></div><div id="card-name-label" class="card-label"></div></div>
-    <div class="card-unit"><div class="reward-card" style="border-style:dashed; opacity:0.1;"></div><div class="card-label">敬请期待</div></div><div class="card-unit"><div class="reward-card" style="border-style:dashed; opacity:0.1;"></div><div class="card-label">敬请期待</div></div></div></div><button onclick="hideGallery()" class="btn-base" style="width:100%; border-color:#333; font-size:12px; margin-top:10px;">返回</button></div></div>
+
+    <div id="gallery-overlay" onclick="if(event.target == this) hideGallery()"><div class="gallery-window"><h3 style="color:var(--gold-m); text-align:center; font-size:14px; margin-top:0;">感官记录图鉴</h3><div class="card-grid" id="card-grid-body">
+        <div class="card-unit"><div id="reward-main" class="reward-card" onclick="playReward()"><img id="reward-img" src=""><div id="lock-badge" style="position:absolute; top:5px; right:5px; background:var(--red); padding:2px 5px; font-size:8px;">未授权</div></div><div id="card-name-label" class="card-label"></div></div>
+        <div class="card-unit"><div class="reward-card" style="border-style:dashed; opacity:0.1;"></div><div class="card-label">敬请期待</div></div><div class="card-unit"><div class="reward-card" style="border-style:dashed; opacity:0.1;"></div><div class="card-label">敬请期待</div></div>
+    </div><button onclick="hideGallery()" class="btn-base" style="width:100%; border-color:#333; font-size:12px; margin-top:10px;">返回</button></div></div>
 
     <audio id="v-player"></audio><audio id="m-player" loop></audio>
+
     <script>
         const _0x51d2=["\x57\x61\x73\x65\x64\x61\x32\x30\x32\x36"];
-        let st = { man:'', mode:'', active:false, time:1500, initial:1500, wl:null, itv:null, isCollapsed:false };
+        let st = { man:'', mode:'', active:false, time:1500, initial:1500, wl:null, itv:null, isCollapsed:false, vToggle:false };
         const datingData = {
             'chi': { title: '迟砚：惩戒阈值', story: '“笔尖停了整整五分钟。从刚才开始，你的视线就没离开过窗外的雨。怎么，实验室的空气让你窒息，还是……我对你的监管，让你觉得难以忍受？”\n\n迟砚面无表情地将平板丢在桌上，沉闷的撞击声激起回响。那种带着冷感的雪松香气随着他的逼近而愈发浓郁。\n\n“站起来，看着我的眼睛回答。”\n\n他极其缓慢地扯下了右手的黑色皮质手套，露出的指尖修长却带着凉意，抵在你的下颌处。那是为了让你被迫迎上他深不见底的目光。\n\n“抖什么？刚才在卷子上乱涂乱画的时候，你的胆量可不是这么小。既然静不下心来，我们就换一种……更‘近’、更‘疼’的方式，来帮你找回专注力。”\n\n他的呼吸压在你的耳侧，低沉的声线下掩藏着某种即将失控的暧昧，“手给我。不许发抖，更不许闭眼……我会让你深刻记住，什么叫……绝对服从。”', img: '../chi_reward.png' },
             'lin': { title: '林深：沦陷奖励', story: '“嘘……别动。头发上沾了花粉。别乱躲，万一剪刀伤到你，我会心疼的。”\n\n温室里氤氲着潮湿的草木清香，林深放下手中的修剪刀，琥珀色的眸子里倒映着你惊慌的脸，带着一种近乎温柔的审视。外面的雨水在玻璃幕墙上蜿蜒，正如他此刻灼热的视线，寸寸扫过你的皮肤。\n\n“这一个月，你做得很出色。那些枯燥的数据、无休止的特训……你都坚持下来了。现在，计时器终于归零了。”\n\n他一步步向你走来，直到把你逼到透明的玻璃边。他微凉的指尖轻轻摩挲着你的耳垂，声音低哑得如同一场蓄谋已久的陷阱。\n\n“我说过，只要表现得乖一点，我会给你想要的奖励。那么……告诉我，你现在最渴望的，是什么？”\n\n他拉起你的手，按在自己心跳的位置，眼神里浮现出掠夺性的温柔，“过来，到我怀里来。别说话，让我听听……这颗已经彻底属于我的心，现在跳得有多快？它在说……它也一样，渴望被你占有。”', img: '../lin_reward.png' }
         };
+
+        function switchVideo(src, loop=false, onEnd=null) {
+            const nextV = st.vToggle ? document.getElementById('v1') : document.getElementById('v2');
+            const currV = st.vToggle ? document.getElementById('v2') : document.getElementById('v1');
+            nextV.src = src; nextV.loop = loop; nextV.onended = onEnd;
+            nextV.load(); nextV.play().then(() => {
+                nextV.classList.add('v-active'); currV.classList.remove('v-active');
+                st.vToggle = !st.vToggle;
+            });
+        }
 
         function toggleVol(){ const p=document.getElementById('vol-panel'); p.style.display=p.style.display==='block'?'none':'block'; }
         function updateVol(){ document.getElementById('m-player').volume=document.getElementById('bgm-vol').value; document.getElementById('v-player').volume=document.getElementById('voice-vol').value; }
@@ -128,21 +158,15 @@
         function playVoice(m) { document.getElementById('v-player').src=`../${m}_select.wav`; document.getElementById('v-player').play(); }
         function openMode(m) { st.man = m; playVoice(m); document.getElementById('mode-modal').style.display='flex'; }
         function confirmMode(md) { st.mode = md; document.getElementById('mode-modal').style.display='none'; document.getElementById('rule-modal').style.display='flex'; }
-        
         function startTraining() { 
             lockS(); document.getElementById('rule-modal').style.display='none'; document.getElementById('selection-ui').style.display='none'; document.getElementById('focus-mode').style.display='block'; document.getElementById('back-home').style.display='block';
-            const v=document.getElementById('v-bg'); v.style.display='block'; const m=st.man==='chi'?'shen':'lin';
-            // 核心修复：预加载资源减少黑屏
-            const startSrc = `../${m}_start.mp4`;
-            const workSrc = `../${m}_work.mp4`;
-            v.src = startSrc; v.loop = false; v.play();
-            v.onended = () => { v.src = workSrc; v.loop = true; v.play(); v.onended = () => { v.src = startSrc; v.loop=false; v.play(); v.onended = () => { v.src=workSrc; v.loop=true; v.play(); }; }; };
-            renderStars(); 
+            const m=st.man==='chi'?'shen':'lin';
+            st.time = st.initial; updateUI(); switchVideo(`../${m}_work.mp4`, true); renderStars(); 
         }
-
         function toggleTimer() {
             st.active = !st.active; document.getElementById('ctrl-btn').innerText = st.active ? "PAUSE" : "RESUME";
             if(st.active) {
+                if(st.time <= 0) st.time = st.initial;
                 if(st.time === st.initial) { document.getElementById('v-player').src=`../${st.man}_${st.mode}_start.wav`; document.getElementById('v-player').play(); }
                 st.endTime = Date.now() + st.time * 1000;
                 if(st.itv) clearInterval(st.itv);
@@ -153,20 +177,15 @@
                 }, 1000);
             } else { if(st.itv) clearInterval(st.itv); st.itv=null; }
         }
-
         function triggerCheck() {
-            const v=document.getElementById('v-bg'); const m=st.man==='chi'?'shen':'lin';
-            const vp = document.getElementById('v-player');
-            v.pause(); v.src=`../${m}_look.mp4`; v.loop=false; 
-            // 关键：先换语音再播视频，确保同步
-            vp.src=`../${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`;
-            vp.play(); v.play(); 
-            v.onended = () => { 
-                v.src=`../${m}_start.mp4`; v.play();
-                v.onended = () => { v.src=`../${m}_work.mp4`; v.loop=true; v.play(); v.onended = null; };
-            };
+            const m=st.man==='chi'?'shen':'lin';
+            switchVideo(`../${m}_look.mp4`, false, () => {
+                switchVideo(`../${m}_start.mp4`, false, () => {
+                    switchVideo(`../${m}_work.mp4`, true);
+                });
+            });
+            document.getElementById('v-player').src=`../${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`; document.getElementById('v-player').play();
         }
-
         function showGallery() { const d=datingData[st.man]; const c=parseInt(localStorage.getItem(`pc_v4_${st.man}_count`)||0); document.getElementById('card-name-label').innerText = d.title.split('：')[1]; document.getElementById('reward-img').src = d.img; document.getElementById('reward-main').classList.toggle('active', c>=30); document.getElementById('gallery-overlay').style.display='flex'; }
         function hideGallery() { document.getElementById('gallery-overlay').style.display='none'; }
         function playReward() {
@@ -181,8 +200,19 @@
         function doSign() { const d=new Date().toDateString(); const key=`pc_v4_${st.man}_sign`; if(localStorage.getItem(key)===d) { alert("今日已签到。"); return; } let c=parseInt(localStorage.getItem(`pc_v4_${st.man}_count`)||0)+1; localStorage.setItem(`pc_v4_${st.man}_count`, Math.min(c, 30)); localStorage.setItem(key, d); renderStars(); alert("同步完成"); }
         function renderStars() { const c=parseInt(localStorage.getItem(`pc_v4_${st.man}_count`)||0); const g=document.getElementById('star-g'); g.innerHTML=''; for(let i=0; i<30; i++) g.innerHTML+=`<div class="star ${i<c?'active':''}">✦</div>`; }
         function updateUI() { const m=Math.floor(st.time / 60); const s=(st.time % 60).toString().padStart(2,'0'); document.getElementById('timer').innerText=`${m}:${s}`; }
-        function backToHall() { if(st.itv) clearInterval(st.itv); st.itv=null; if(st.wl) st.wl.release(); st.active=false; st.man=''; document.getElementById('ctrl-btn').innerText = "START"; updateUI(); document.getElementById('focus-mode').style.display='none'; document.getElementById('selection-ui').style.display='block'; document.getElementById('back-home').style.display='none'; document.getElementById('v-bg').pause(); }
-        function initCarousel() { const el=document.getElementById('selection-ui'); const inner=document.getElementById('carousel'); el.addEventListener('touchstart', e=>st.touchX=e.touches[0].clientX); el.addEventListener('touchend', e=>{ if(window.innerHeight>window.innerWidth){ const endX = e.changedTouches[0].clientX; const diff = st.touchX - endX; if(Math.abs(diff)>50){ st.curIdx=(st.curIdx===0?1:0); inner.style.transform=`translateX(-${st.curIdx*100}%)`; } } }); }
+        function backToHall() { if(st.itv) clearInterval(st.itv); st.itv=null; if(st.wl) st.wl.release(); st.active=false; st.man=''; st.time = st.initial; document.getElementById('ctrl-btn').innerText = "START"; updateUI(); document.getElementById('focus-mode').style.display='none'; document.getElementById('selection-ui').style.display='block'; document.getElementById('back-home').style.display='none'; document.getElementById('v1').pause(); document.getElementById('v2').pause(); }
+        function initCarousel() {
+            const el=document.getElementById('selection-ui'); const inner=document.getElementById('carousel');
+            const handler = (e) => {
+                if(window.innerHeight>window.innerWidth){
+                    const endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+                    const diff = st.touchX - endX;
+                    if(Math.abs(diff)>50){ st.curIdx=(st.curIdx===0?1:0); inner.style.transform=`translateX(-${st.curIdx*100}%)`; }
+                }
+            };
+            el.addEventListener('touchstart', e=>st.touchX=e.touches[0].clientX); el.addEventListener('touchend', handler);
+            el.addEventListener('mousedown', e=>st.touchX=e.clientX); el.addEventListener('mouseup', handler);
+        }
         initCarousel();
         function tryFullScreen() { const doc=window.document.documentElement; if(doc.requestFullscreen) doc.requestFullscreen(); else if(doc.webkitRequestFullScreen) doc.webkitRequestFullScreen(); }
     </script>
