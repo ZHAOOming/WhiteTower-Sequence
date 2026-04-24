@@ -18,7 +18,7 @@
         .auth-btn { background: var(--gold-m); color: black; border: none; padding: 15px 60px; font-weight: bold; letter-spacing: 5px; }
         #selection-ui { position: relative; width: 100%; height: 100%; z-index: 10; display: none; background: #000; overflow: hidden; }
         .carousel-container { display: flex; height: 100%; transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1); }
-        .char-slide { min-width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; position: relative; padding: 20px; }
+        .char-slide { min-width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; }
         .card-frame { position: relative; width: 100%; height: 85vh; border: 1px solid var(--gold-d); border-radius: 15px; overflow: hidden; background: #111; display: flex; flex-direction: column; justify-content: flex-end; }
         .char-portrait { position: absolute; top: -5%; left: 0; width: 100%; height: 100%; background-size: contain; background-repeat: no-repeat; background-position: center center; z-index: 1; }
         .nav-hint { position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center; color: var(--gold-l); font-size: 14px; letter-spacing: 4px; text-shadow: 0 0 10px var(--gold-m); opacity: 0.8; z-index: 5; animation: pulse 2s infinite; pointer-events: none; }
@@ -27,7 +27,6 @@
         .char-name { font-size: 32px; color: var(--gold-l); font-weight: bold; letter-spacing: 8px; margin-bottom: 8px; }
         .char-desc { font-size: 13px; color: #bbb; line-height: 1.6; font-style: italic; }
 
-        /* 右上角调节 */
         #vol-btn { position: fixed; top: 20px; right: 20px; z-index: 9500; display: none; color: var(--gold-m); font-size: 24px; background: rgba(0,0,0,0.6); width: 44px; height: 44px; line-height: 44px; text-align: center; border-radius: 50%; border: 1px solid var(--gold-d); }
         #vol-panel { position: fixed; top: 75px; right: 20px; z-index: 9500; display: none; background: var(--glass); border: 1px solid var(--gold-m); padding: 15px; border-radius: 15px; backdrop-filter: blur(10px); }
         .vol-row { display: flex; align-items: center; gap: 10px; margin: 8px 0; color: var(--gold-l); font-size: 10px; }
@@ -41,22 +40,27 @@
         .star.active { color: var(--gold-m); }
         .btn-base { background: none; border: 1px solid var(--gold-m); color: var(--gold-m); padding: 12px; font-weight: bold; width: 100%; max-width: 280px; margin-top: 10px; }
 
-        /* 卡面详情诱惑效果 */
-        #reward-detail-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 9900; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
-        .detail-card-box { width: 100%; max-width: 250px; aspect-ratio: 3/4; border: 1px solid var(--gold-m); overflow: hidden; margin-bottom: 15px; }
-        .story-container { position: relative; width: 100%; max-height: 220px; margin-bottom: 20px; overflow: hidden; }
-        .detail-story-scroll { color: #aaa; font-size: 13px; line-height: 1.8; padding: 0 20px; font-style: italic; white-space: pre-line; text-align: left; }
-        .story-lock-layer { position: absolute; top: 3.8em; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.95) 15%, #000 60%); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
-
-        #back-home { position: fixed; top: env(safe-area-inset-top, 20px); left: 20px; z-index: 8500; display: none; background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px; font-size: 12px; border: 1px solid var(--gold-m); color: var(--gold-m); }
-        #mode-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 11000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
-        #rule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 11500; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .rule-window { background: #0a0a0a; border: 1px solid var(--gold-m); padding: 40px; text-align: center; width: 450px; max-width: 90%; }
+        /* 3x2 排列修复 */
         #gallery-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9500; display: none; align-items: center; justify-content: center; }
         .gallery-window { background: #0a0a0a; border: 1px solid var(--gold-m); width: 92%; max-width: 500px; padding: 20px; border-radius: 12px; }
-        .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-        .reward-card { width: 100%; aspect-ratio: 3/4; border: 1px solid #222; filter: grayscale(1); }
+        .card-scroll-area { max-height: 320px; overflow-y: auto; overflow-x: hidden; }
+        .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; width: 100%; }
+        .reward-card { width: 100%; aspect-ratio: 3/4; border: 1px solid #222; filter: grayscale(1); position: relative; overflow: hidden; }
         .reward-card.active { filter: grayscale(0); border-color: var(--gold-m); }
+        .reward-card img { width: 100%; height: 100%; object-fit: cover; }
+        .card-label { font-size: 9px; color: var(--gold-d); margin-top: 5px; text-align: center; }
+
+        /* 详情 UI 修正 */
+        #reward-detail-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 11000; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; text-align: center; }
+        .detail-card-box { width: 250px; height: 333px; border: 1px solid var(--gold-m); overflow: hidden; margin-bottom: 15px; flex-shrink: 0; }
+        .story-container { position: relative; width: 100%; max-height: 220px; overflow: hidden; margin-bottom: 20px; }
+        .detail-story-scroll { color: #aaa; font-size: 13px; line-height: 1.8; padding: 0 20px; font-style: italic; white-space: pre-line; text-align: left; height: 220px; overflow-y: auto; }
+        .story-lock-layer { position: absolute; top: 3.8em; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.95) 15%, #000 60%); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10; }
+
+        .progress-flow { position: absolute; bottom: 0; left: 0; height: 3px; background: var(--gold-l); width: 0%; transition: width 0.1s linear; }
+        #back-home { position: fixed; top: env(safe-area-inset-top, 20px); left: 20px; z-index: 8500; display: none; background: rgba(0,0,0,0.5); padding: 8px 15px; border-radius: 20px; font-size: 12px; border: 1px solid var(--gold-m); color: var(--gold-m); }
+        #mode-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 12000; display: none; flex-direction: column; justify-content: center; align-items: center; padding: 40px; }
+        #rule-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 13000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
     </style>
 </head>
 <body onclick="tryFullScreen()">
@@ -73,8 +77,8 @@
     </div>
     <div id="selection-ui">
         <div class="carousel-container" id="carousel">
-            <div class="char-slide"><div class="card-frame" onclick="playVoice('chi')"><div class="nav-hint">点击立绘互动 / 左右滑动切换</div><div class="char-portrait" style="background-image:url('../shen.png')"></div><div class="char-info-box"><div class="char-name">迟 砚</div><div class="char-desc">“笔尖停得太久了。如果不想要这双手，我可以帮帮你。”</div><button class="btn-base" onclick="openMode('chi')">确认接入</button></div></div></div>
-            <div class="char-slide"><div class="card-frame" onclick="playVoice('lin')"><div class="nav-hint">点击立绘互动 / 左右滑动切换</div><div class="char-portrait" style="background-image:url('../lin.png')"></div><div class="char-info-box"><div class="char-name">林 深</div><div class="char-desc">“乖一点。等计时器归零，我会给你想要的奖励。”</div><button class="btn-base" onclick="openMode('lin')">确认接入</button></div></div></div>
+            <div class="char-slide"><div class="card-frame" onclick="playVoice('chi')"><div class="nav-hint">点击立绘互动 / 左右滑动切换</div><div class="char-portrait" style="background-image:url('../shen.png')"></div><div class="char-info-box"><div class="char-name">迟 砚</div><div class="char-desc">“笔尖停得太久了。如果不想要这双手，我可以帮帮你。”</div><button class="btn-base" onclick="event.stopPropagation(); openMode('chi')">确认接入</button></div></div></div>
+            <div class="char-slide"><div class="card-frame" onclick="playVoice('lin')"><div class="nav-hint">点击立绘互动 / 左右滑动切换</div><div class="char-portrait" style="background-image:url('../lin.png')"></div><div class="char-info-box"><div class="char-name">林 深</div><div class="char-desc">“乖一点。等计时器归零，我会给你想要的奖励。”</div><button class="btn-base" onclick="event.stopPropagation(); openMode('lin')">确认接入</button></div></div></div>
         </div>
     </div>
     <div id="focus-mode" style="display:none; position:relative; width:100%; height:100%;">
@@ -96,16 +100,20 @@
             <div id="detail-story-scroll" class="detail-story-scroll"></div>
             <div id="story-lock" class="story-lock-layer"><span>🔒</span><div style="font-size:11px; color:var(--gold-m); margin-top:5px;">签到满30日解锁全文档案与录音</div></div>
         </div>
-        <button id="secret-play-btn" class="btn-base" style="width:auto; padding:10px 40px; border-radius:30px; display:none; position:relative; overflow:hidden;" onclick="triggerSecretVoice()">同步感官记录<div id="secret-bar" style="position:absolute; bottom:0; left:0; height:3px; background:var(--gold-l); width:0%;"></div></button>
+        <button id="secret-play-btn" class="btn-base" style="width:auto; padding:10px 40px; border-radius:30px; display:none; position:relative; overflow:hidden;" onclick="triggerSecretVoice()">同步感官记录<div id="secret-bar" class="progress-flow"></div></button>
         <div onclick="closeDetail()" style="color:#555; font-size:11px; margin-top:40px; text-decoration:underline;">关闭档案</div>
     </div>
-    <div id="rule-modal"><div class="rule-window"><div class="rule-title">「白塔序列」特训准则</div><ul style="text-align:left; color:#ccc; font-size:14px; line-height:1.8; list-style:none; padding:0 20px;"><li>✦ 监考官将全程实时监控您的学习进度。</li><li>✦ 每累积签到 30 天，可激活绝密感官记录。</li><li>✦ 特训期间请保持专注，随机查岗随时降临。</li><li>✦ 严禁中途非授权断开连接。</li></ul><button class="btn-base" style="background:var(--gold-m); color:black;" onclick="startTraining()">接受特训</button></div></div>
+    <div id="rule-modal"><div class="rule-window"><div class="rule-title">「白塔序列」特训准则</div><ul style="text-align:left; color:#ccc; font-size:14px; line-height:1.8; list-style:none; padding:0 20px;"><li>✦ 监考官将全程实时监控您的学习进度。</li><li>✦ 每累积签到 30 天，可激活对应监考官的绝密感官记录。</li><li>✦ 特训期间请保持专注，随机查岗随时降临。</li><li>✦ 严禁中途非授权断开连接。</li></ul><button class="btn-base" style="background:var(--gold-m); color:black;" onclick="startTraining()">接受特训</button></div></div>
     <div id="mode-modal">
         <div style="color:var(--gold-m); margin-bottom:20px; font-size:14px;">调整特训时长</div>
-        <div style="display:flex; align-items:center; justify-content:center; gap:20px; margin-bottom:30px;"><button class="auth-btn" style="padding:10px 20px; width:50px;" onclick="adjTime(-5)">-</button><div id="set-time-display" style="font-size:42px; color:var(--gold-m);">25:00</div><button class="auth-btn" style="padding:10px 20px; width:50px;" onclick="adjTime(5)">+</button></div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:20px; margin-bottom:30px;"><button class="auth-btn" style="padding:10px 20px; width:50px;" onclick="adjTime(-5)">-</button><div id="set-time-display" style="font-size:42px; color:var(--gold-m); width:130px;">25:00</div><button class="auth-btn" style="padding:10px 20px; width:50px;" onclick="adjTime(5)">+</button></div>
         <button class="btn-base" onclick="confirmMode(1)">陪伴模式</button><button class="btn-base" style="color:var(--red); border-color:var(--red); margin-top:20px;" onclick="confirmMode(3)">监管模式</button>
     </div>
-    <div id="gallery-overlay" onclick="if(event.target == this) hideGallery()"><div class="gallery-window"><h3 style="color:var(--gold-m); text-align:center; font-size:14px; margin-top:0;">感官记录图鉴</h3><div class="card-grid"><div class="card-unit"><div id="reward-main" class="reward-card" onclick="playReward()"><img id="reward-img" src=""><div id="lock-badge" style="position:absolute; top:5px; right:5px; background:var(--red); padding:2px 5px; font-size:8px;">未授权</div></div><div id="card-name-label" style="font-size:9px; color:var(--gold-d); margin-top:5px;"></div></div></div><button onclick="hideGallery()" class="btn-base" style="width:100%; border-color:#333; font-size:12px; margin-top:10px;">返回</button></div></div>
+    <div id="gallery-overlay" onclick="if(event.target == this) hideGallery()"><div class="gallery-window"><h3 style="color:var(--gold-m); text-align:center; font-size:14px; margin-top:0;">感官记录图鉴</h3><div class="card-scroll-area"><div class="card-grid" id="card-g-body">
+        <div class="card-unit"><div id="reward-main" class="reward-card" onclick="playReward()"><img id="reward-img" src=""><div id="lock-badge" style="position:absolute; top:5px; right:5px; background:var(--red); padding:2px 5px; font-size:8px;">未授权</div></div><div id="card-name-label" class="card-label"></div></div>
+        <div class="card-unit"><div class="reward-card" style="border-style:dashed; opacity:0.1;"></div><div class="card-label">敬请期待</div></div>
+        <div class="card-unit"><div class="reward-card" style="border-style:dashed; opacity:0.1;"></div><div class="card-label">敬请期待</div></div>
+    </div></div><button onclick="hideGallery()" class="btn-base" style="width:100%; border-color:#333; font-size:12px; margin-top:10px;">返回</button></div></div>
     <audio id="v-player"></audio><audio id="m-player" loop></audio>
     <script>
         const _0x51d2=["\x57\x61\x73\x65\x64\x61\x32\x30\x32\x36"];
@@ -126,8 +134,8 @@
         function startTraining() { 
             lockS(); document.getElementById('rule-modal').style.display='none'; document.getElementById('selection-ui').style.display='none'; document.getElementById('focus-mode').style.display='block'; document.getElementById('back-home').style.display='block';
             const v=document.getElementById('v-bg'); v.style.display='block'; const m=st.man==='chi'?'shen':'lin';
-            const runSeq = () => { v.src=`../${m}_start.mp4`; v.play(); v.onended = () => { v.src=`../${m}_work.mp4`; v.play(); v.onended = () => { runSeq(); }; }; };
-            runSeq(); renderStars(); 
+            const runWork = () => { v.src=`../${m}_work.mp4`; v.loop=true; v.play(); v.onended = null; };
+            runWork(); renderStars(); 
         }
         function toggleTimer() {
             st.active = !st.active; document.getElementById('ctrl-btn').innerText = st.active ? "PAUSE" : "RESUME";
@@ -144,8 +152,12 @@
         }
         function triggerCheck() {
             const v=document.getElementById('v-bg'); const m=st.man==='chi'?'shen':'lin';
-            v.src=`../${m}_look.mp4`; v.play(); document.getElementById('v-player').src=`../${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`; document.getElementById('v-player').play();
-            v.onended = () => { v.src=`../${m}_start.mp4`; v.play(); v.onended = () => { v.src=`../${m}_work.mp4`; v.play(); v.onended = null; }; };
+            v.src=`../${m}_look.mp4`; v.loop=false; v.play();
+            document.getElementById('v-player').src=`../${st.man}_${st.mode}_mid_${Math.floor(Math.random()*3)+1}.wav`; document.getElementById('v-player').play();
+            v.onended = () => { 
+                v.src=`../${m}_start.mp4`; v.play();
+                v.onended = () => { v.src=`../${m}_work.mp4`; v.loop=true; v.play(); v.onended = null; };
+            };
         }
         function showGallery() { const d=datingData[st.man]; const c=parseInt(localStorage.getItem(`pc_v4_${st.man}_count`)||0); document.getElementById('card-name-label').innerText = d.title.split('：')[1]; document.getElementById('reward-img').src = d.img; document.getElementById('reward-main').classList.toggle('active', c>=30); document.getElementById('gallery-overlay').style.display='flex'; }
         function hideGallery() { document.getElementById('gallery-overlay').style.display='none'; }
@@ -160,20 +172,9 @@
         function triggerSecretVoice() { const vp = document.getElementById('v-player'); const bar = document.getElementById('secret-bar'); vp.src = `../${st.man}_secret.wav`; vp.play(); vp.ontimeupdate = () => { bar.style.width = (vp.currentTime / vp.duration) * 100 + "%"; }; vp.onended = () => { bar.style.width = "0%"; }; }
         function doSign() { const d=new Date().toDateString(); const key=`pc_v4_${st.man}_sign`; if(localStorage.getItem(key)===d) { alert("今日已签到。"); return; } let c=parseInt(localStorage.getItem(`pc_v4_${st.man}_count`)||0)+1; localStorage.setItem(`pc_v4_${st.man}_count`, Math.min(c, 30)); localStorage.setItem(key, d); renderStars(); alert("同步完成"); }
         function renderStars() { const c=parseInt(localStorage.getItem(`pc_v4_${st.man}_count`)||0); const g=document.getElementById('star-g'); g.innerHTML=''; for(let i=0; i<30; i++) g.innerHTML+=`<div class="star ${i<c?'active':''}">✦</div>`; }
-        function updateUI() { const m=Math.floor(st.time/60); const s=(st.time%60).toString().padStart(2,'0'); document.getElementById('timer').innerText=`${m}:${s}`; }
+        function updateUI() { const m=Math.floor(st.time / 60); const s=(st.time % 60).toString().padStart(2,'0'); document.getElementById('timer').innerText=`${m}:${s}`; }
         function backToHall() { if(st.itv) clearInterval(st.itv); st.itv=null; if(st.wl) st.wl.release(); st.active=false; st.man=''; document.getElementById('ctrl-btn').innerText = "START"; updateUI(); document.getElementById('focus-mode').style.display='none'; document.getElementById('selection-ui').style.display='block'; document.getElementById('back-home').style.display='none'; document.getElementById('v-bg').pause(); }
-        function initCarousel() {
-            const el=document.getElementById('selection-ui'); const inner=document.getElementById('carousel');
-            const handler = (e) => {
-                if(window.innerHeight>window.innerWidth){
-                    const endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
-                    const diff = st.touchX - endX;
-                    if(Math.abs(diff)>50){ st.curIdx=(st.curIdx===0?1:0); inner.style.transform=`translateX(-${st.curIdx*100}%)`; }
-                }
-            };
-            el.addEventListener('touchstart', e=>st.touchX=e.touches[0].clientX); el.addEventListener('touchend', handler);
-            el.addEventListener('mousedown', e=>st.touchX=e.clientX); el.addEventListener('mouseup', handler);
-        }
+        function initCarousel() { const el=document.getElementById('selection-ui'); const inner=document.getElementById('carousel'); el.addEventListener('touchstart', e=>st.touchX=e.touches[0].clientX); el.addEventListener('touchend', e=>{ if(window.innerHeight>window.innerWidth){ const diff=st.touchX-e.changedTouches[0].clientX; if(Math.abs(diff)>50){ st.curIdx=(st.curIdx===0?1:0); inner.style.transform=`translateX(-${st.curIdx*100}%)`; } } }); }
         initCarousel();
         function tryFullScreen() { const doc=window.document.documentElement; if(doc.requestFullscreen) doc.requestFullscreen(); else if(doc.webkitRequestFullScreen) doc.webkitRequestFullScreen(); }
     </script>
